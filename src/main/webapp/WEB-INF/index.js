@@ -7,17 +7,16 @@ const fs = require('fs');
     headless: true,    
     args: [
       '--no-sandbox',
-      '--disable-setuid-sandbox',
+      '--disable-setuid-sandbox'
     ]
-  }).then((state) => {
-    console.debug("(state.action === 'DONE', 'should change state')");
-  })
-  .catch((error) => {
+  }).catch((error) => {
     console.debug("assert.isNotOk("+error+",'Promise error')");
   });
 
   // create a new page
-  const page = await browser.newPage();
+  const page = await browser.newPage().catch((error) => {
+    console.debug("assert.isNotOk("+error+",'Promise error')");
+  });
 
   // set your html as the pages content
   const html = fs.readFileSync('output.html', 'utf8');
