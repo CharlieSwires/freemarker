@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringBufferInputStream;
@@ -30,6 +31,7 @@ import freemarker.template.Version;
 @Service
 public class Freemarker {
 
+    static boolean doneOnce = false;
     @SuppressWarnings("unchecked")
     public synchronized String convert(String csvFilename, int columns) throws Exception {
         // 1. Configure FreeMarker
@@ -64,7 +66,7 @@ public class Freemarker {
         for (CSVRecord record : records) {
             Object c = null;
             switch(columns) {
-            
+
             case 1:
                 c = new Columns1();
                 ((Columns1) c).setCol0(record.get(0));
@@ -86,7 +88,7 @@ public class Freemarker {
                 ((Columns4) c).setCol1(record.get(1));
                 ((Columns4) c).setCol2(record.get(2));
                 ((Columns4) c).setCol3(record.get(3));
-                 break;
+                break;
             case 5:
                 c = new Columns5();
                 ((Columns5) c).setCol0(record.get(0));
@@ -94,9 +96,9 @@ public class Freemarker {
                 ((Columns5) c).setCol2(record.get(2));
                 ((Columns5) c).setCol3(record.get(3));
                 ((Columns5) c).setCol4(record.get(4));
-                 break;
-                default:
-                    throw new IllegalArgumentException();
+                break;
+            default:
+                throw new IllegalArgumentException();
             }
             systems.add(c);
         }
@@ -107,7 +109,7 @@ public class Freemarker {
 
         Template template = null;
         switch(columns) {
-        
+
         case 1:
             template = cfg.getTemplate("columns1.ftl");
             break;
@@ -152,20 +154,44 @@ public class Freemarker {
         } finally {
             fileWriter.close();
         }
-      
         boolean isWindows = System.getProperty("os.name")
                 .toLowerCase().startsWith("windows");
         ProcessBuilder builder = new ProcessBuilder();
         if (isWindows) {
             throw new RuntimeException("Not Supported");
-//            builder.command("cmd.exe", "/c", "del test.pdf");
-//            builder.command("cmd.exe", "/c", "node index.js");
+            //            builder.command("cmd.exe", "/c", "del test.pdf");
+            //            builder.command("cmd.exe", "/c", "node index.js");
+        } else {
+            builder.command("sh", "-c", "chmod a+xr index.js");
+            builder.directory(new File("/usr/local/tomcat"));
+            Process process = builder.start();
+
+            if(!doneOnce) {
+                builder.command("sh", "-c", "adduser user");
+                builder.directory(new File("/usr/local/tomcat"));
+                process = builder.start();
+                OutputStream os = process.getOutputStream();
+                os.write("\n1\n1\n\n".getBytes());
+                doneOnce = true;
+            }
+        }
+
+        builder = new ProcessBuilder();
+        if (isWindows) {
+            throw new RuntimeException("Not Supported");
+            //            builder.command("cmd.exe", "/c", "del test.pdf");
+            //            builder.command("cmd.exe", "/c", "node index.js");
         } else {
             builder.command("sh", "-c", "rm test.pdf");
+            builder.directory(new File("/usr/local/tomcat"));
+            Process process = builder.start();
+            builder.command("sh", "-c", "su user");
+            builder.directory(new File("/usr/local/tomcat"));
+            process = builder.start();
             builder.command("sh", "-c", "node index.js");
+            builder.directory(new File("/usr/local/tomcat"));
+            process = builder.start();
         }
-        builder.directory(new File("/usr/local/tomcat"));
-        Process process = builder.start();
         int i = 0;
         BufferedReader br = null;
         while (i++ < 30) {
@@ -185,6 +211,11 @@ public class Freemarker {
             result += ""+(char)c;
         }
         br.close();
+        builder = new ProcessBuilder();
+        builder.command("sh", "-c", "exit");
+        builder.directory(new File("/usr/local/tomcat"));
+        Process process = builder.start();
+
         return result;
     }
 }
