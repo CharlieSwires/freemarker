@@ -57,7 +57,7 @@ public class Freemarker {
 
         Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put("title", "Charlie example");
+        input.put("title", "SCubed PDF");
 
         List systems = new ArrayList();
 
