@@ -6,13 +6,13 @@
 <body>
   <h1>${title}</h1>
 
-<table>
+<table width="100%" border="4px">
     <#list systems as system>
       <tr>
-      <td>${system_index + 1}</td>
-      <td>${system.col0}</td>
-      <td>${system.col1}</td>
-      <td>${system.col2}</td></tr>
+      <td border="1px">${system_index + 1}</td>
+      <td border="1px">${system.col0}</td>
+      <td border="1px">${system.col1}</td>
+      <td border="1px">${system.col2}</td></tr>
     </#list>
 </table>
 </body>
