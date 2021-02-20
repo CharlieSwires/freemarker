@@ -31,7 +31,7 @@ postman
 <p>Supports 1-5 columns can be extended simply.</p>
 <p>http://localhost:8888/freemarker/GeneralToPDF</p>
 {
-    "inputHTML" : "<html><head><title>${title}</title></head><body><h1>${title}</h1><h1>${next}</h1></body></html>",
+    "inputHTML" : ".......",
     "replacementStrings" : "title,my title1\nnext,my next2\n"
 }
 
