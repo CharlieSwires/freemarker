@@ -197,16 +197,16 @@ public class Freemarker {
             fileWriter.close();
         }
 
-        template =cfg.getTemplate("index.js");;
-        consoleWriter = new OutputStreamWriter(System.out);
-        template.process(input, consoleWriter);
-        consoleWriter.flush();
-        fileWriter = new FileWriter(new File("/usr/local/tomcat/index.js"));
-        try {
-            template.process(input, fileWriter);
-        } finally {
-            fileWriter.close();
-        }
+//        template =cfg.getTemplate("index.js");;
+//        consoleWriter = new OutputStreamWriter(System.out);
+//        template.process(input, consoleWriter);
+//        consoleWriter.flush();
+//        fileWriter = new FileWriter(new File("/usr/local/tomcat/index.js"));
+//        try {
+//            template.process(input, fileWriter);
+//        } finally {
+//            fileWriter.close();
+//        }
         boolean isWindows = System.getProperty("os.name")
                 .toLowerCase().startsWith("windows");
         ProcessBuilder builder = new ProcessBuilder();
@@ -271,6 +271,7 @@ public class Freemarker {
 
         return result;
     }
+    
     public synchronized String convert(String inputHTML, String replacementStrings) throws Exception {
 
         FileWriter fw = new FileWriter(new File("/usr/local/tomcat/input.ftl"));
@@ -285,7 +286,6 @@ public class Freemarker {
         Configuration cfg = new Configuration();
         // Where do we load the templates from:
         cfg.setDirectoryForTemplateLoading(new File("/usr/local/tomcat"));
-
         // Some other recommended settings:
         cfg.setIncompatibleImprovements(new Version(2, 3, 20));
         cfg.setDefaultEncoding("UTF-8");
@@ -293,9 +293,6 @@ public class Freemarker {
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 
         Map<String, Object> input = new HashMap<String, Object>();
-
-
-        List systems = new ArrayList();
 
         Reader in = new StringReader(replacementStrings);
         Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
@@ -317,16 +314,16 @@ public class Freemarker {
         } finally {
             fileWriter.close();
         }
-        template =cfg.getTemplate("index.js");;
-        consoleWriter = new OutputStreamWriter(System.out);
-        template.process(input, consoleWriter);
-        consoleWriter.flush();
-        fileWriter = new FileWriter(new File("/usr/local/tomcat/index.js"));
-        try {
-            template.process(input, fileWriter);
-        } finally {
-            fileWriter.close();
-        }
+//        template =cfg.getTemplate("index.js");;
+//        consoleWriter = new OutputStreamWriter(System.out);
+//        template.process(input, consoleWriter);
+//        consoleWriter.flush();
+//        fileWriter = new FileWriter(new File("/usr/local/tomcat/index.js"));
+//        try {
+//            template.process(input, fileWriter);
+//        } finally {
+//            fileWriter.close();
+//        }
         boolean isWindows = System.getProperty("os.name")
                 .toLowerCase().startsWith("windows");
         ProcessBuilder builder = new ProcessBuilder();
