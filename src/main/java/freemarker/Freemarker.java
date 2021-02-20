@@ -197,16 +197,6 @@ public class Freemarker {
             fileWriter.close();
         }
 
-//        template =cfg.getTemplate("index.js");;
-//        consoleWriter = new OutputStreamWriter(System.out);
-//        template.process(input, consoleWriter);
-//        consoleWriter.flush();
-//        fileWriter = new FileWriter(new File("/usr/local/tomcat/index.js"));
-//        try {
-//            template.process(input, fileWriter);
-//        } finally {
-//            fileWriter.close();
-//        }
         boolean isWindows = System.getProperty("os.name")
                 .toLowerCase().startsWith("windows");
         ProcessBuilder builder = new ProcessBuilder();
@@ -314,16 +304,6 @@ public class Freemarker {
         } finally {
             fileWriter.close();
         }
-//        template =cfg.getTemplate("index.js");;
-//        consoleWriter = new OutputStreamWriter(System.out);
-//        template.process(input, consoleWriter);
-//        consoleWriter.flush();
-//        fileWriter = new FileWriter(new File("/usr/local/tomcat/index.js"));
-//        try {
-//            template.process(input, fileWriter);
-//        } finally {
-//            fileWriter.close();
-//        }
         boolean isWindows = System.getProperty("os.name")
                 .toLowerCase().startsWith("windows");
         ProcessBuilder builder = new ProcessBuilder();
