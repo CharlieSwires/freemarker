@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping(path = "/PDF/")
+@RequestMapping(path = "/TabularToPDF/")
 public class RController  {
     private static final Logger LOGGER = LoggerFactory.getLogger(RController.class);
 
     @Autowired
     private Freemarker service;
+    @Autowired
+    private Encryption encryption;
 
     public RController(Freemarker service2) {
         service = service2;
@@ -29,12 +31,18 @@ public class RController  {
     public ResponseEntity<ReturnBean> postFile(@PathVariable("cols") Integer cols, @RequestBody InputBean input) {
         String result=null;
         try {
-            result = service.convert(input.getFile(), cols);
+            result = service.convert(input.getTitle(),
+                    input.getDatetime(),
+                    input.getPrintedby(),
+                    input.getHeadings(),
+                    input.getFile(),
+                    cols);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         ReturnBean rb = new ReturnBean();
         rb.setFile(result);
+        rb.setSha1(encryption.sha1(result));
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
 

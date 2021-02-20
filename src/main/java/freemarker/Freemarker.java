@@ -33,7 +33,12 @@ public class Freemarker {
 
     static boolean doneOnce = false;
     @SuppressWarnings("unchecked")
-    public synchronized String convert(String csvFilename, int columns) throws Exception {
+    public synchronized String convert(String title,
+            String datetime,
+            String printedby,
+            String csvHeadings,
+            String csvList,
+            int columns) throws Exception {
         // 1. Configure FreeMarker
         //
         // You should do this ONLY ONCE, when your application starts,
@@ -57,12 +62,59 @@ public class Freemarker {
 
         Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put("title", "SCubed PDF");
+        input.put("title", title);
+        input.put("printedby", printedby);
+        input.put("datetime", datetime);
 
         List systems = new ArrayList();
-
-        Reader in = new StringReader(csvFilename);
+        
+        Reader in = new StringReader(csvHeadings);
         Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
+        for (CSVRecord record : records) {
+            Object c = null;
+            switch(columns) {
+
+            case 1:
+                c = new Columns1();
+                ((Columns1) c).setCol0(record.get(0));
+                break;
+            case 2:
+                c = new Columns2();
+                ((Columns2) c).setCol0(record.get(0));
+                ((Columns2) c).setCol1(record.get(1));
+                break;
+            case 3:
+                c = new Columns3();
+                ((Columns3) c).setCol0(record.get(0));
+                ((Columns3) c).setCol1(record.get(1));
+                ((Columns3) c).setCol2(record.get(2));
+                break;
+            case 4:
+                c = new Columns4();
+                ((Columns4) c).setCol0(record.get(0));
+                ((Columns4) c).setCol1(record.get(1));
+                ((Columns4) c).setCol2(record.get(2));
+                ((Columns4) c).setCol3(record.get(3));
+                break;
+            case 5:
+                c = new Columns5();
+                ((Columns5) c).setCol0(record.get(0));
+                ((Columns5) c).setCol1(record.get(1));
+                ((Columns5) c).setCol2(record.get(2));
+                ((Columns5) c).setCol3(record.get(3));
+                ((Columns5) c).setCol4(record.get(4));
+                break;
+            default:
+                throw new IllegalArgumentException();
+            }
+            systems.add(c);
+        }
+
+        input.put("headings", systems);
+        systems = new ArrayList();
+
+        in = new StringReader(csvList);
+        records = CSVFormat.EXCEL.parse(in);
         for (CSVRecord record : records) {
             Object c = null;
             switch(columns) {
