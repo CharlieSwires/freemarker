@@ -1,5 +1,7 @@
 package freemarker;
 
+import java.util.Base64;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +43,9 @@ public class RController  {
             throw new RuntimeException(e);
         }
         ReturnBean rb = new ReturnBean();
-        rb.setFile(result);
-        rb.setSha1(encryption.sha1(result));
+        rb.setFileB64(result);
+        Base64.Decoder b64d = Base64.getDecoder();
+        rb.setSha1(encryption.sha1(b64d.decode(result)));
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
     @PostMapping(path="GeneralToPDF", produces="application/json", consumes="application/json")
@@ -55,8 +58,9 @@ public class RController  {
             throw new RuntimeException(e);
         }
         ReturnBean rb = new ReturnBean();
-        rb.setFile(result);
-        rb.setSha1(encryption.sha1(result));
+        rb.setFileB64(result);
+        Base64.Decoder b64d = Base64.getDecoder();
+        rb.setSha1(encryption.sha1(b64d.decode(result)));
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
 

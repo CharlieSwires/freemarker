@@ -2,19 +2,17 @@ package freemarker;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.io.StringBufferInputStream;
 import java.io.StringReader;
 import java.io.Writer;
-import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -236,29 +234,28 @@ public class Freemarker {
             process = builder.start();
         }
         int i = 0;
-        BufferedReader br = null;
+        byte[] fileContent = null;
         while (i++ < 30) {
             try {
-                br =  new BufferedReader(new FileReader(new File("/usr/local/tomcat/test.pdf")));
+                File file = new File("/usr/local/tomcat/test.pdf");
+                fileContent = Files.readAllBytes(file.toPath());
             } catch (Exception e) {
                 Thread.sleep(10000);
-                br = null;
+                fileContent = null;
             }
         }
-        String result ="";
-        if (br == null) throw new RuntimeException("Timed out");
-        result = "";
-        while(true) {
-            int c = br.read();
-            if (c == -1) break;
-            result += ""+(char)c;
-        }
-        br.close();
+        if (fileContent == null) throw new RuntimeException("Timed out");
+        Base64.Encoder b64e = Base64.getEncoder();
+//        Base64.Decoder b64d = Base64.getDecoder();
+        String result = b64e.encodeToString(fileContent);
+        
         builder = new ProcessBuilder();
         builder.command("sh", "-c", "exit");
         builder.directory(new File("/usr/local/tomcat"));
         Process process = builder.start();
-
+//        try (FileOutputStream fos = new FileOutputStream("/usr/local/tomcat/result.pdf")) {
+//            fos.write(b64d.decode(result));
+//        }        
         return result;
     }
     
@@ -343,29 +340,28 @@ public class Freemarker {
             process = builder.start();
         }
         int i = 0;
-        BufferedReader br = null;
+        byte[] fileContent = null;
         while (i++ < 30) {
             try {
-                br =  new BufferedReader(new FileReader(new File("/usr/local/tomcat/test.pdf")));
+                File file = new File("/usr/local/tomcat/test.pdf");
+                fileContent = Files.readAllBytes(file.toPath());
             } catch (Exception e) {
                 Thread.sleep(10000);
-                br = null;
+                fileContent = null;
             }
         }
-        String result ="";
-        if (br == null) throw new RuntimeException("Timed out");
-        result = "";
-        while(true) {
-            int c = br.read();
-            if (c == -1) break;
-            result += ""+(char)c;
-        }
-        br.close();
+        if (fileContent == null) throw new RuntimeException("Timed out");
+        Base64.Encoder b64e = Base64.getEncoder();
+//        Base64.Decoder b64d = Base64.getDecoder();
+        String result = b64e.encodeToString(fileContent);
+        
         builder = new ProcessBuilder();
         builder.command("sh", "-c", "exit");
         builder.directory(new File("/usr/local/tomcat"));
         Process process = builder.start();
-
-        return result;
+//        try (FileOutputStream fos = new FileOutputStream("/usr/local/tomcat/result.pdf")) {
+//            fos.write(b64d.decode(result));
+//        }        
+        return result;    
     }
 }

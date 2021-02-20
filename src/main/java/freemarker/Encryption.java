@@ -137,8 +137,8 @@ public class Encryption {
         return b64.encodeToString(keyBC.getEncoded());
 
     }
-    public String sha1(String input) {
-        byte[] result = new String(input).getBytes();
+    public String sha1(byte[] bs) {
+        byte[] result = bs;
         Base64.Encoder b64 = Base64.getEncoder();
         SHA1Digest digester = new SHA1Digest();
         byte[] retValue  = null;
