@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping(path = "/TabularToPDF/")
+@RequestMapping(path = "/")
 public class RController  {
     private static final Logger LOGGER = LoggerFactory.getLogger(RController.class);
 
@@ -27,7 +27,7 @@ public class RController  {
     }
     
 
-    @PostMapping(path="columns/{cols}", produces="application/json", consumes="application/json")
+    @PostMapping(path="TabularToPDF/columns/{cols}", produces="application/json", consumes="application/json")
     public ResponseEntity<ReturnBean> postFile(@PathVariable("cols") Integer cols, @RequestBody InputBean input) {
         String result=null;
         try {
@@ -37,6 +37,20 @@ public class RController  {
                     input.getHeadings(),
                     input.getFile(),
                     cols);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        ReturnBean rb = new ReturnBean();
+        rb.setFile(result);
+        rb.setSha1(encryption.sha1(result));
+        return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
+    }
+    @PostMapping(path="GeneralToPDF", produces="application/json", consumes="application/json")
+    public ResponseEntity<ReturnBean> postFile(@RequestBody InputBeanGeneral input) {
+        String result=null;
+        try {
+            result = service.convert(input.getInputHTML(),
+                    input.getReplacementStrings());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

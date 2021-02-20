@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -67,7 +68,7 @@ public class Freemarker {
         input.put("datetime", datetime);
 
         List systems = new ArrayList();
-        
+
         Reader in = new StringReader(csvHeadings);
         Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
         for (CSVRecord record : records) {
@@ -196,6 +197,126 @@ public class Freemarker {
             fileWriter.close();
         }
 
+        template =cfg.getTemplate("index.js");;
+        consoleWriter = new OutputStreamWriter(System.out);
+        template.process(input, consoleWriter);
+        consoleWriter.flush();
+        fileWriter = new FileWriter(new File("/usr/local/tomcat/index.js"));
+        try {
+            template.process(input, fileWriter);
+        } finally {
+            fileWriter.close();
+        }
+        boolean isWindows = System.getProperty("os.name")
+                .toLowerCase().startsWith("windows");
+        ProcessBuilder builder = new ProcessBuilder();
+        if (isWindows) {
+            throw new RuntimeException("Not Supported");
+            //            builder.command("cmd.exe", "/c", "del test.pdf");
+            //            builder.command("cmd.exe", "/c", "node index.js");
+        } else {
+            builder.command("sh", "-c", "chmod a+xr index.js");
+            builder.directory(new File("/usr/local/tomcat"));
+            Process process = builder.start();
+
+            if(!doneOnce) {
+                builder.command("sh", "-c", "adduser user");
+                builder.directory(new File("/usr/local/tomcat"));
+                process = builder.start();
+                OutputStream os = process.getOutputStream();
+                os.write("\n1\n1\n\n".getBytes());
+                doneOnce = true;
+            }
+        }
+
+        builder = new ProcessBuilder();
+        if (isWindows) {
+            throw new RuntimeException("Not Supported");
+            //            builder.command("cmd.exe", "/c", "del test.pdf");
+            //            builder.command("cmd.exe", "/c", "node index.js");
+        } else {
+            builder.command("sh", "-c", "rm test.pdf");
+            builder.directory(new File("/usr/local/tomcat"));
+            Process process = builder.start();
+            builder.command("sh", "-c", "su user");
+            builder.directory(new File("/usr/local/tomcat"));
+            process = builder.start();
+            builder.command("sh", "-c", "node index.js");
+            builder.directory(new File("/usr/local/tomcat"));
+            process = builder.start();
+        }
+        int i = 0;
+        BufferedReader br = null;
+        while (i++ < 30) {
+            try {
+                br =  new BufferedReader(new FileReader(new File("/usr/local/tomcat/test.pdf")));
+            } catch (Exception e) {
+                Thread.sleep(10000);
+                br = null;
+            }
+        }
+        String result ="";
+        if (br == null) throw new RuntimeException("Timed out");
+        result = "";
+        while(true) {
+            int c = br.read();
+            if (c == -1) break;
+            result += ""+(char)c;
+        }
+        br.close();
+        builder = new ProcessBuilder();
+        builder.command("sh", "-c", "exit");
+        builder.directory(new File("/usr/local/tomcat"));
+        Process process = builder.start();
+
+        return result;
+    }
+    public synchronized String convert(String inputHTML, String replacementStrings) throws Exception {
+
+        FileWriter fw = new FileWriter(new File("/usr/local/tomcat/input.ftl"));
+        fw.write(inputHTML);
+        fw.close();
+
+        // 1. Configure FreeMarker
+        //
+        // You should do this ONLY ONCE, when your application starts,
+        // then reuse the same Configuration object elsewhere.
+
+        Configuration cfg = new Configuration();
+        // Where do we load the templates from:
+        cfg.setDirectoryForTemplateLoading(new File("/usr/local/tomcat"));
+
+        // Some other recommended settings:
+        cfg.setIncompatibleImprovements(new Version(2, 3, 20));
+        cfg.setDefaultEncoding("UTF-8");
+        cfg.setLocale(Locale.US);
+        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+
+        Map<String, Object> input = new HashMap<String, Object>();
+
+
+        List systems = new ArrayList();
+
+        Reader in = new StringReader(replacementStrings);
+        Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
+        for (CSVRecord record : records) {
+            input.put(record.get(0), record.get(1)); 
+        }
+
+        Template template = cfg.getTemplate("input.ftl");
+
+        // Write output to the console
+        Writer consoleWriter = new OutputStreamWriter(System.out);
+        template.process(input, consoleWriter);
+        consoleWriter.flush();
+
+        // For the sake of example, also write output into a file:
+        Writer fileWriter = new FileWriter(new File("/usr/local/tomcat/output.html"));
+        try {
+            template.process(input, fileWriter);
+        } finally {
+            fileWriter.close();
+        }
         template =cfg.getTemplate("index.js");;
         consoleWriter = new OutputStreamWriter(System.out);
         template.process(input, consoleWriter);

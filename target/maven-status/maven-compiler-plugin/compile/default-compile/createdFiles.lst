@@ -3,6 +3,7 @@ freemarker\Encryption$FixedRand.class
 freemarker\Columns4.class
 freemarker\InputBean.class
 freemarker\ReturnBean.class
+freemarker\InputBeanGeneral.class
 freemarker\RController.class
 freemarker\Freemarker.class
 freemarker\Encryption.class
