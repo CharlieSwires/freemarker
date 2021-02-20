@@ -22,13 +22,20 @@ deploy
 
 postman
 -------
-<p>http://localhost:8888/freemarker/PDF/columns/3</p>
+<p>http://localhost:8888/freemarker/TabularToPDF/columns/3</p>
 { "file" : "1,2,3"
 }
-<p>http://localhost:8888/freemarker/PDF/columns/3</p>
+<p>http://localhost:8888/freemarker/TabularToPDF/columns/3</p>
 { "file" : "hello,there,finally"
 }
 <p>Supports 1-5 columns can be extended simply.</p>
+<p>http://localhost:8888/freemarker/GeneralToPDF</p>
+{
+    "inputHTML" : "<html><head><title>${title}</title></head><body><h1>${title}</h1><h1>${next}</h1></body></html>",
+    "replacementStrings" : "title,my title1\nnext,my next2\n"
+}
+
+
 
 browser
 -------
