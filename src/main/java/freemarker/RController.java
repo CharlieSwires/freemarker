@@ -85,6 +85,8 @@ public class RController  {
     }
     /**
      * Compares the given sha1 with one generated from the file.
+     * @param input
+     * @return
      */
     @PostMapping(path="isTamperdWith", produces="application/json", consumes="application/json")
     public ResponseEntity<Boolean> isTamperedWith(@RequestBody TamperedBean input) {
