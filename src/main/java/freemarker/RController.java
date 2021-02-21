@@ -24,8 +24,9 @@ public class RController  {
     @Autowired
     private Encryption encryption;
 
-    public RController(Freemarker service2) {
+    public RController(Freemarker service2, Encryption encryption2) {
         service = service2;
+        encryption = encryption2;
     }
     
     /**
