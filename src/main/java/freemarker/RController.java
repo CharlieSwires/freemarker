@@ -83,7 +83,7 @@ public class RController  {
         rb.setSha1(encryption.sha1(b64d.decode(result)));
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
-    /*
+    /**
      * Compares the given sha1 with one generated from the file.
      */
     @PostMapping(path="isTamperdWith", produces="application/json", consumes="application/json")
