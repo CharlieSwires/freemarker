@@ -88,7 +88,7 @@ public class RController  {
      * @param input
      * @return
      */
-    @PostMapping(path="isTamperdWith", produces="application/json", consumes="application/json")
+    @PostMapping(path="isTamperedWith", produces="application/json", consumes="application/json")
     public ResponseEntity<Boolean> isTamperedWith(@RequestBody TamperedBean input) {
         Base64.Decoder b64d = Base64.getDecoder();
         return new ResponseEntity<Boolean>(!input.getSha1().equals(
