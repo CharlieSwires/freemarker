@@ -63,6 +63,13 @@ public class RController  {
         rb.setSha1(encryption.sha1(b64d.decode(result)));
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
+    @PostMapping(path="isTamperdWith", produces="application/json", consumes="application/json")
+    public ResponseEntity<Boolean> isTamperedWith(@RequestBody TamperedBean input) {
+        Base64.Decoder b64d = Base64.getDecoder();
+        return new ResponseEntity<Boolean>(!input.getSha1().equals(
+                encryption.sha1(
+                        b64d.decode(input.getFileB64()))), HttpStatus.OK);
+    }
 
 
 }
