@@ -28,7 +28,16 @@ public class RController  {
         service = service2;
     }
     
-
+    /**
+     * Given cols columns and input choose the correct ftl file
+     * and Columns?.java produce a table 1-5 columns in a PDF.
+     * CSV indicates EXCEL format CSV input this is used in the 
+     * table headingsCSV and fileCSV and should have the same cols
+     * 
+     * @param cols
+     * @param input
+     * @return
+     */
     @PostMapping(path="TabularToPDF/columns/{cols}", produces="application/json", consumes="application/json")
     public ResponseEntity<ReturnBean> postFile(@PathVariable("cols") Integer cols, @RequestBody InputBean input) {
         String result=null;
@@ -36,8 +45,8 @@ public class RController  {
             result = service.convert(input.getTitle(),
                     input.getDatetime(),
                     input.getPrintedby(),
-                    input.getHeadings(),
-                    input.getFile(),
+                    input.getHeadingsCSV(),
+                    input.getFileCSV(),
                     cols);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -48,12 +57,22 @@ public class RController  {
         rb.setSha1(encryption.sha1(b64d.decode(result)));
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
+    /**
+     * Given the input which takes inputFTL and replacementStringsCSV
+     * pass to freemarker then pass to the PDF generator returning
+     * Base64 file and sha1.
+     * CSV indicates EXCEL format CSV input this is used in the 
+     * replacementStringsCSV and should have columns = 2
+     * 
+     * @param input
+     * @return
+     */
     @PostMapping(path="GeneralToPDF", produces="application/json", consumes="application/json")
     public ResponseEntity<ReturnBean> postFile(@RequestBody InputBeanGeneral input) {
         String result=null;
         try {
             result = service.convert(input.getInputFTL(),
-                    input.getReplacementStrings());
+                    input.getReplacementStringsCSV());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -63,6 +82,9 @@ public class RController  {
         rb.setSha1(encryption.sha1(b64d.decode(result)));
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
+    /*
+     * Compares the given sha1 with one generated from the file.
+     */
     @PostMapping(path="isTamperdWith", produces="application/json", consumes="application/json")
     public ResponseEntity<Boolean> isTamperedWith(@RequestBody TamperedBean input) {
         Base64.Decoder b64d = Base64.getDecoder();

@@ -2,8 +2,8 @@ package freemarker;
 
 public class InputBean {
 
-    private String file;
-    private String headings;
+    private String fileCSV;
+    private String headingsCSV;
     private String printedby;
     private String datetime;
     private String title;
@@ -11,12 +11,20 @@ public class InputBean {
     public InputBean() {
     }
 
-    public String getFile() {
-        return file;
+    public String getFileCSV() {
+        return fileCSV;
     }
 
-    public void setFile(String file) {
-        this.file = file;
+    public void setFileCSV(String fileCSV) {
+        this.fileCSV = fileCSV;
+    }
+
+    public String getHeadingsCSV() {
+        return headingsCSV;
+    }
+
+    public void setHeadingsCSV(String headingsCSV) {
+        this.headingsCSV = headingsCSV;
     }
 
     public String getPrintedby() {
@@ -43,12 +51,5 @@ public class InputBean {
         this.title = title;
     }
 
-    public String getHeadings() {
-        return headings;
-    }
 
-    public void setHeadings(String headings) {
-        this.headings = headings;
-    }
-   
 }

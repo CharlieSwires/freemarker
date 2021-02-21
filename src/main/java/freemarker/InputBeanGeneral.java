@@ -3,18 +3,12 @@ package freemarker;
 public class InputBeanGeneral {
 
     private String inputFTL;
-    private String replacementStrings;
+    private String replacementStringsCSV;
     
     public InputBeanGeneral() {
         
     }
 
-    public String getReplacementStrings() {
-        return replacementStrings;
-    }
-    public void setReplacementStrings(String replacementStrings) {
-        this.replacementStrings = replacementStrings;
-    }
 
     public String getInputFTL() {
         return inputFTL;
@@ -22,5 +16,15 @@ public class InputBeanGeneral {
 
     public void setInputFTL(String inputFTL) {
         this.inputFTL = inputFTL;
+    }
+
+
+    public String getReplacementStringsCSV() {
+        return replacementStringsCSV;
+    }
+
+
+    public void setReplacementStringsCSV(String replacementStringsCSV) {
+        this.replacementStringsCSV = replacementStringsCSV;
     }
 }
