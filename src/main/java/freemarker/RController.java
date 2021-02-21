@@ -52,7 +52,7 @@ public class RController  {
     public ResponseEntity<ReturnBean> postFile(@RequestBody InputBeanGeneral input) {
         String result=null;
         try {
-            result = service.convert(input.getInputHTML(),
+            result = service.convert(input.getInputFTL(),
                     input.getReplacementStrings());
         } catch (Exception e) {
             throw new RuntimeException(e);
