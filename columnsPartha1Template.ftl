@@ -31,12 +31,7 @@ ${system.creAt},
 ${system.updBy},
 ${system.updAt}
 </p>
-
-    <#list system.findingsText as finding>
-<p>    ${finding.type},${finding.note}</p>
-    </#list>
-
-    </#list>
+</#list>
 
 </body>
 </html>

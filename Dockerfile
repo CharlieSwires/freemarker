@@ -28,5 +28,6 @@ RUN  apt-get update \
 ADD package.json /usr/local/tomcat
 ADD package-lock.json /usr/local/tomcat
 ADD index.js /usr/local/tomcat
+ADD columnsPartha1Template.ftl /usr/local/tomcat
 RUN npm install
 RUN npm install fs
