@@ -84,6 +84,42 @@ public class RController  {
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
     /**
+     * Saves the template to file
+     * @param input
+     * @return
+     */
+    @PostMapping(path="Init", produces="application/json", consumes="application/json")
+    public ResponseEntity<Boolean> initFile(@RequestBody InputBeanInit input) {
+        Boolean result=null;
+        try {
+            result = service.init(input.getInputFTL(),
+                    input.getFilename());
+        } catch (Exception e) {
+            result = false;
+            throw new RuntimeException(e);
+        }
+        return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+    }
+    /**
+     * Converts an array of Partha1InputBean to PDF via columnsPartha1Template.ftl
+     * @param input
+     * @return
+     */
+    @PostMapping(path="Partha1ToPDF", produces="application/json", consumes="application/json")
+    public ResponseEntity<ReturnBean> partha1File(@RequestBody Partha1InputBean[] input) {
+        String result=null;
+        try {
+            result = service.convert2(input);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        ReturnBean rb = new ReturnBean();
+        rb.setFileB64(result);
+        Base64.Decoder b64d = Base64.getDecoder();
+        rb.setSha1(encryption.sha1(b64d.decode(result)));
+        return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
+    }
+    /**
      * Compares the given sha1 with one generated from the file.
      * @param input
      * @return
