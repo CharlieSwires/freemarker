@@ -120,6 +120,25 @@ public class RController  {
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
     /**
+     * Converts a HTML string to PDF
+     * @param input
+     * @return
+     */
+    @PostMapping(path="ToPDF", produces="application/json", consumes="application/json")
+    public ResponseEntity<ReturnBean> toPDF(@RequestBody InputHTMLString input) {
+        String result=null;
+        try {
+            result = service.convert2(input);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        ReturnBean rb = new ReturnBean();
+        rb.setFileB64(result);
+        Base64.Decoder b64d = Base64.getDecoder();
+        rb.setSha1(encryption.sha1(b64d.decode(result)));
+        return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
+    }
+    /**
      * Compares the given sha1 with one generated from the file.
      * @param input
      * @return

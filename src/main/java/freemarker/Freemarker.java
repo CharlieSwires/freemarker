@@ -2,6 +2,7 @@ package freemarker;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
@@ -489,4 +490,77 @@ public class Freemarker {
         //        }        
         return result;
     }
+
+    public String convert2(InputHTMLString input) throws Exception {
+
+        FileWriter fw = new FileWriter(new File("/usr/local/tomcat/output.html"));
+        fw.write(input.getInputHTML());
+        fw.close();
+        
+        Writer consoleWriter = new OutputStreamWriter(System.out);
+        consoleWriter.write(input.getInputHTML());
+        consoleWriter.flush();
+
+        boolean isWindows = System.getProperty("os.name")
+                .toLowerCase().startsWith("windows");
+        ProcessBuilder builder = new ProcessBuilder();
+        if (isWindows) {
+            throw new RuntimeException("Not Supported");
+            //            builder.command("cmd.exe", "/c", "del test.pdf");
+            //            builder.command("cmd.exe", "/c", "node index.js");
+        } else {
+            builder.command("sh", "-c", "chmod a+xr index.js");
+            builder.directory(new File("/usr/local/tomcat"));
+            Process process = builder.start();
+
+            if(!doneOnce) {
+                builder.command("sh", "-c", "adduser user");
+                builder.directory(new File("/usr/local/tomcat"));
+                process = builder.start();
+                OutputStream os = process.getOutputStream();
+                os.write("\n1\n1\n\n".getBytes());
+                doneOnce = true;
+            }
+        }
+
+        builder = new ProcessBuilder();
+        if (isWindows) {
+            throw new RuntimeException("Not Supported");
+            //            builder.command("cmd.exe", "/c", "del test.pdf");
+            //            builder.command("cmd.exe", "/c", "node index.js");
+        } else {
+            builder.command("sh", "-c", "rm test.pdf");
+            builder.directory(new File("/usr/local/tomcat"));
+            Process process = builder.start();
+            builder.command("sh", "-c", "su user");
+            builder.directory(new File("/usr/local/tomcat"));
+            process = builder.start();
+            builder.command("sh", "-c", "node index.js");
+            builder.directory(new File("/usr/local/tomcat"));
+            process = builder.start();
+        }
+        int i = 0;
+        byte[] fileContent = null;
+        while (i++ < 30) {
+            try {
+                File file = new File("/usr/local/tomcat/test.pdf");
+                fileContent = Files.readAllBytes(file.toPath());
+            } catch (Exception e) {
+                Thread.sleep(10000);
+                fileContent = null;
+            }
+        }
+        if (fileContent == null) throw new RuntimeException("Timed out");
+        Base64.Encoder b64e = Base64.getEncoder();
+        //        Base64.Decoder b64d = Base64.getDecoder();
+        String result = b64e.encodeToString(fileContent);
+
+        builder = new ProcessBuilder();
+        builder.command("sh", "-c", "exit");
+        builder.directory(new File("/usr/local/tomcat"));
+        Process process = builder.start();
+        //        try (FileOutputStream fos = new FileOutputStream("/usr/local/tomcat/result.pdf")) {
+        //            fos.write(b64d.decode(result));
+        //        }        
+        return result;     }
 }
