@@ -490,7 +490,6 @@ public class Freemarker {
         //        }        
         return result;
     }
-
     public String convert2(InputHTMLString input) throws Exception {
 
         FileWriter fw = new FileWriter(new File("/usr/local/tomcat/output.html"));
