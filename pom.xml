@@ -6,7 +6,7 @@
 		<version>2.2.9.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>  
-	<groupId>uk.co.scube</groupId>
+	<groupId>freemarker</groupId>
   <artifactId>freemarker</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   

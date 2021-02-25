@@ -344,7 +344,7 @@ public class Freemarker {
             //            builder.command("cmd.exe", "/c", "del test.pdf");
             //            builder.command("cmd.exe", "/c", "node index.js");
         } else {
-            builder.command("sh", "-c", "rm test.pdf");
+            builder.command("sh", "-c", "rm test*.pdf");
             builder.directory(new File("/usr/local/tomcat"));
             Process process = builder.start();
             builder.command("sh", "-c", "su user");
