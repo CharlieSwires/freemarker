@@ -1,12 +1,22 @@
 package freemarker;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Base64;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +33,8 @@ public class RController  {
     private Freemarker service;
     @Autowired
     private Encryption encryption;
+    @Autowired
+    private FileStorageService fileStorageService;
 
     public RController(Freemarker service2, Encryption encryption2) {
         service = service2;
@@ -150,6 +162,36 @@ public class RController  {
                 encryption.sha1(
                         b64d.decode(input.getFileB64()))), HttpStatus.OK);
     }
+    @GetMapping("/downloadFile")
+    public ResponseEntity<Resource> downloadFile(HttpServletRequest request) throws Exception {
+        File file= new File("test.pdf");
+        // ...(file is initialised)...
+        byte[] fileContent = Files.readAllBytes(file.toPath());
+        Base64.Decoder b64d = Base64.getDecoder();
+        String hexString = encryption.byteArrayToHexString(b64d.decode(encryption.sha1(fileContent)));
+        try (FileOutputStream fos = new FileOutputStream("result"+hexString+".pdf")) {
+            fos.write(fileContent);
+         }
 
+        // Load file as Resource
+        Resource resource = fileStorageService.loadFileAsResource("result"+hexString+".pdf");
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            LOGGER.info("Could not determine file type.");
+        }
+
+        // Fallback to the default content type if type could not be determined
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
 
 }
