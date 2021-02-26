@@ -1,7 +1,7 @@
 freemarker
 ----------
 <p>in git bash
-git clone https://github.com/scubetech-dev/freemarker</p>
+git clone https://github.com/CharlieSwires/freemarker</p>
 
 <p>This contains both the java and node</p>
 
