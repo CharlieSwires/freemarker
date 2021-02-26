@@ -8,9 +8,40 @@ public class InputBeanGeneral2 {
     private String footerHTML;
     private ArrayOfItems[] arrayOfItems;
 
-    static class ArrayOfItems {
+    public InputBeanGeneral2() {
+        
+    }
+    public static class ArrayOfItems {
         private String inputCSV;
         private FindingsText[] findingsText;
+  
+        public ArrayOfItems() {
+            
+        }
+        public static class FindingsText{
+            private String type;
+            private String note;
+            public FindingsText() {
+                
+            }
+                 public String getType() {
+                return type;
+            }
+            public void setType(String type) {
+                this.type = type;
+            }
+            public String getNote() {
+                return note;
+            }
+            public void setNote(String note) {
+                this.note = note;
+            }
+            @Override
+            public String toString() {
+                return "FindingsText [type=" + type + ", note=" + note + "]";
+            }
+        }
+
         public String getInputCSV() {
             return inputCSV;
         }
@@ -30,27 +61,7 @@ public class InputBeanGeneral2 {
         }
     }
 
-    static class FindingsText{
-        private String type;
-        private String note;
-        public String getType() {
-            return type;
-        }
-        public void setType(String type) {
-            this.type = type;
-        }
-        public String getNote() {
-            return note;
-        }
-        public void setNote(String note) {
-            this.note = note;
-        }
-        @Override
-        public String toString() {
-            return "FindingsText [type=" + type + ", note=" + note + "]";
-        }
-    }
-
+ 
     public String getHeaderHTML() {
         return headerHTML;
     }
