@@ -5,11 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Base64;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.validator.internal.util.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/")
 public class RController  {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RController.class);
 
     @Autowired
     private Freemarker service;
@@ -35,6 +34,7 @@ public class RController  {
     private Encryption encryption;
     @Autowired
     private FileStorageService fileStorageService;
+
 
     public RController(Freemarker service2, Encryption encryption2) {
         service = service2;
@@ -86,6 +86,25 @@ public class RController  {
         try {
             result = service.convert(input.getInputFTL(),
                     input.getReplacementStringsCSV());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        ReturnBean rb = new ReturnBean();
+        rb.setFileB64(result);
+        Base64.Decoder b64d = Base64.getDecoder();
+        rb.setSha1(encryption.sha1(b64d.decode(result)));
+        return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
+    }
+    /**
+     * 
+     * @param input
+     * @return
+     */
+    @PostMapping(path="GeneralToPDF2", produces="application/json", consumes="application/json")
+    public ResponseEntity<ReturnBean> postFile(@RequestBody InputBeanGeneral2 input) {
+        String result=null;
+        try {
+            result = service.convert(input);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -180,7 +199,7 @@ public class RController  {
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
-            LOGGER.info("Could not determine file type.");
+            ex.printStackTrace();
         }
 
         // Fallback to the default content type if type could not be determined
