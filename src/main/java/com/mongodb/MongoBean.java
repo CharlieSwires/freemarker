@@ -1,17 +1,33 @@
-package freemarker;
+package com.mongodb;
 
 import java.util.Arrays;
+import java.util.Date;
 
-public class InputBeanGeneral2 {
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection="General2")
+public class MongoBean {
+
+	public MongoBean() {
+		
+	}
+
+    @Id
+    private String id;
+    
+    private String who;
+    private Date dateRequested;
+    private String outfilename;
+
+    private String fileB64;
+    private String sha1;
+
     private String headerHTML;
     private String bodyFTL;
     private String footerHTML;
     private ArrayOfItems[] arrayOfItems;
-    private String who;
 
-    public InputBeanGeneral2() {
-        
-    }
     public static class ArrayOfItems {
         private String inputCSV;
         private FindingsText[] findingsText;
@@ -102,6 +118,14 @@ public class InputBeanGeneral2 {
                 + "]";
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getWho() {
         return who;
     }
@@ -109,5 +133,36 @@ public class InputBeanGeneral2 {
     public void setWho(String who) {
         this.who = who;
     }
-}
 
+    public Date getDateRequested() {
+        return dateRequested;
+    }
+
+    public void setDateRequested(Date dateRequested) {
+        this.dateRequested = dateRequested;
+    }
+
+    public String getFileB64() {
+        return fileB64;
+    }
+
+    public void setFileB64(String fileB64) {
+        this.fileB64 = fileB64;
+    }
+
+    public String getSha1() {
+        return sha1;
+    }
+
+    public void setSha1(String sha1) {
+        this.sha1 = sha1;
+    }
+
+    public String getOutfilename() {
+        return outfilename;
+    }
+
+    public void setOutfilename(String outfilename) {
+        this.outfilename = outfilename;
+    }
+}

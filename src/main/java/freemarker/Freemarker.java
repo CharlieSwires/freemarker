@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -21,6 +23,8 @@ import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
+
+import com.mongodb.MongoBean;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -387,7 +391,7 @@ public class Freemarker {
         return result;    
     }
 
-    public synchronized String convert(InputBeanGeneral2 input) throws Exception {
+    public synchronized String convert(InputBeanGeneral2 input, Date date) throws Exception {
   
         Writer consoleWriter = new OutputStreamWriter(System.out);
         consoleWriter.write("=====================>"+input.toString());
@@ -420,7 +424,12 @@ public class Freemarker {
         {
             Map<String, Object> input2 = new HashMap<String, Object>();
             List<Object> systems = new ArrayList<Object>();
-             
+            
+            input2.put("who", input.getWho());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            input2.put("datePrinted", ""+cal.get(Calendar.DATE)+"/"+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.YEAR));
+            
             for(int j = 0; j < input.getArrayOfItems()[i].getFindingsText().length; j++ ) {
                 InputBeanGeneral2.ArrayOfItems.FindingsText item = new InputBeanGeneral2.ArrayOfItems.FindingsText();
                 item.setType(input.getArrayOfItems()[i].getFindingsText()[j].getType());
@@ -466,7 +475,38 @@ public class Freemarker {
         FileWriter fw1 = new FileWriter(new File("/usr/local/tomcat/output.html"));
         fw1.write(sb.toString());
         fw1.close();
-
+        
         return publishPDF();
+    }
+
+    public MongoBean converter(InputBeanGeneral2 input, ReturnBean rb, String outFile, Date date) {
+        MongoBean mb = new MongoBean();
+        mb.setBodyFTL(input.getBodyFTL());
+        mb.setDateRequested(date);
+        mb.setFileB64(rb.getFileB64());
+        mb.setFooterHTML(input.getFooterHTML());
+        mb.setHeaderHTML(input.getHeaderHTML());
+        mb.setSha1(rb.getSha1());
+        mb.setWho(input.getWho());
+        mb.setOutfilename(outFile);
+        MongoBean.ArrayOfItems[] arrayOfItems = new MongoBean.ArrayOfItems[input.getArrayOfItems().length];
+        int i = 0;
+        for(InputBeanGeneral2.ArrayOfItems item : input.getArrayOfItems()) {
+            MongoBean.ArrayOfItems arrayItem = new MongoBean.ArrayOfItems();
+            arrayItem.setInputCSV(item.getInputCSV());
+            MongoBean.ArrayOfItems.FindingsText[] findings = new MongoBean.ArrayOfItems.FindingsText[item.getFindingsText().length];
+            int j = 0;
+            for(InputBeanGeneral2.ArrayOfItems.FindingsText item2: item.getFindingsText()) {
+                MongoBean.ArrayOfItems.FindingsText findingItem = new MongoBean.ArrayOfItems.FindingsText();
+                findingItem.setType(item2.getType());
+                findingItem.setNote(item2.getNote());
+                findings[j++] = findingItem;
+            }
+            arrayItem.setFindingsText(findings);
+            arrayOfItems[i++] = arrayItem;
+        }
+        mb.setArrayOfItems(arrayOfItems);
+        
+        return mb;
     }
 }

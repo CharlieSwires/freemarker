@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Base64;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mongodb.MongoBeanRepository;
+
 
 @RestController
 @RequestMapping(path = "/")
@@ -32,7 +35,8 @@ public class RController  {
     private Encryption encryption;
     @Autowired
     private FileStorageService fileStorageService;
-
+    @Autowired
+    private MongoBeanRepository beanRepository;
 
     public RController(Freemarker service2, Encryption encryption2) {
         service = service2;
@@ -105,8 +109,9 @@ public class RController  {
     @PostMapping(path="GeneralToPDF2", produces="application/json", consumes="application/json")
     public ResponseEntity<ReturnBean> postFile(@RequestBody InputBeanGeneral2 input) {
         String result=null;
+        Date date = new Date();
         try {
-            result = service.convert(input);
+            result = service.convert(input, date);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -114,6 +119,8 @@ public class RController  {
         rb.setFileB64(result);
         Base64.Decoder b64d = Base64.getDecoder();
         rb.setSha1(encryption.sha1(b64d.decode(result)));
+        String hexString = encryption.byteArrayToHexString(b64d.decode(encryption.sha1((b64d.decode(result)))));
+        beanRepository.save(service.converter(input,rb,"result"+hexString+".pdf",date));
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
     /**
@@ -183,7 +190,7 @@ public class RController  {
                 encryption.sha1(
                         b64d.decode(input.getFileB64()))), HttpStatus.OK);
     }
-    @GetMapping("/downloadFile")
+    @GetMapping("downloadFile")
     public ResponseEntity<Resource> downloadFile(HttpServletRequest request) throws Exception {
         File file= new File("test.pdf");
         // ...(file is initialised)...
