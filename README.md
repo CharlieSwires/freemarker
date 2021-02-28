@@ -81,7 +81,7 @@ postman
 "filename": "columnsPartha1Template.ftl"
 }
 
-<p>http://localhost:8888/freemarker/Partha1ToPDF.</p>
+<p>http://localhost:8888/freemarker/Partha1ToPDFAndDownload.</p>
 [
   {
     "auditId": 1,
@@ -199,8 +199,4 @@ postman
     "inputHTML": "..........."
 }
 
-browser
--------
-<p> If you have had a successful call to the PDF URL you can download the file here although the reply JSON contains the characters that make up the test file so all you have to do is convert them to bytes from Base64 string to then a file.</p>
-<p>http://localhost:8888/freemarker/downloadFile</p>
 

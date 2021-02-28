@@ -224,8 +224,7 @@ public class RController  {
      * @return
      * @throws Exception
      */
-    @GetMapping("downloadFile")
-    public ResponseEntity<Resource> downloadFile(HttpServletRequest request) throws Exception {
+    private ResponseEntity<Resource> downloadFile(HttpServletRequest request) throws Exception {
         File file= new File("test.pdf");
         // ...(file is initialised)...
         byte[] fileContent = Files.readAllBytes(file.toPath());
@@ -308,5 +307,17 @@ public class RController  {
         return downloadFile(request);
     }
  
-
+    /**
+     * Combination method
+     * @param input
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(path="Partha1ToPDFAndDownload", produces="application/json", consumes="application/json")
+    public ResponseEntity<Resource> partha1FileAndDownload(@RequestBody Partha1InputBean[] input, HttpServletRequest request) throws Exception {
+        partha1File(input);
+        return downloadFile(request);
+    }
+ 
 }
