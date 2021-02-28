@@ -13,7 +13,11 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
+/**
+ * Copyright 2021 Charles Swires All Rights Reserved
+ * @author charl
+ *
+ */
 
 @Service
 public class FileStorageService {

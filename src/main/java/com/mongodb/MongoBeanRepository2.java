@@ -3,7 +3,11 @@ import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-
+/**
+ * Copyright 2021 Charles Swires All Rights Reserved
+ * @author charl
+ *
+ */
 
 public interface MongoBeanRepository2 extends MongoRepository<MongoBean2, Long>{
 

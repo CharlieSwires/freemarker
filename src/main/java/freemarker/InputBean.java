@@ -1,7 +1,11 @@
 package freemarker;
 
 import java.util.Date;
-
+/**
+ * Copyright 2021 Charles Swires All Rights Reserved
+ * @author charl
+ *
+ */
 public class InputBean {
 
     private String fileCSV;

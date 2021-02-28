@@ -1,7 +1,11 @@
 package freemarker;
 
 import java.util.Arrays;
-
+/**
+ * Copyright 2021 Charles Swires All Rights Reserved
+ * @author charl
+ *
+ */
 public class Partha1InputBean {
  
         private int auditId; //1,

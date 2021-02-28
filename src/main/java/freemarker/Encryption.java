@@ -24,7 +24,11 @@ import org.bouncycastle.crypto.util.PrivateKeyFactory;
 import org.bouncycastle.crypto.util.PublicKeyFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.stereotype.Service;
-
+/**
+ * Copyright 2021 Charles Swires All Rights Reserved
+ * @author charl
+ *
+ */
 @Service
 public class Encryption {
 

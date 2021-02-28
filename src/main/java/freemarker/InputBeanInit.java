@@ -1,5 +1,9 @@
 package freemarker;
-
+/**
+ * Copyright 2021 Charles Swires All Rights Reserved
+ * @author charl
+ *
+ */
 public class InputBeanInit {
     private String inputFTL;
     private String filename;

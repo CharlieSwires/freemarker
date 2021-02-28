@@ -1,5 +1,9 @@
 package freemarker;
-
+/**
+ * Copyright 2021 Charles Swires All Rights Reserved
+ * @author charl
+ *
+ */
 public class Columns3 {
 
     private String col0;

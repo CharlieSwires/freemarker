@@ -26,7 +26,11 @@ import com.mongodb.MongoBeanRepository;
 import com.mongodb.MongoBeanRepository2;
 import com.mongodb.MongoBeanRepository3;
 
-
+/**
+ * Copyright 2021 Charles Swires All Rights Reserved
+ * @author charl
+ *
+ */
 @RestController
 @RequestMapping(path = "/")
 public class RController  {
@@ -236,14 +240,27 @@ public class RController  {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
-    
+    /**
+     * Combination method
+     * @param cols
+     * @param input
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @PostMapping(path="TabularToPDFAndDownload/columns/{cols}", consumes="application/json")
     public synchronized ResponseEntity<Resource> postFileAndDownload(@PathVariable("cols") Integer cols, @RequestBody InputBean input, HttpServletRequest request) throws Exception {
         postFile(cols, input);
         return downloadFile(request);
 
     }
- 
+    /**
+     * Combination method
+     * @param input
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @PostMapping(path="GeneralToPDFAndDownload", consumes="application/json")
     public synchronized ResponseEntity<Resource> postFileAndDownload(@RequestBody InputBeanGeneral input, HttpServletRequest request) throws Exception {
         postFile(input);
@@ -251,6 +268,13 @@ public class RController  {
 
     }
 
+    /**
+     * Combination method
+     * @param input
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @PostMapping(path="GeneralToPDF2AndDownload", consumes="application/json")
     public synchronized ResponseEntity<Resource> postFileAndDownload(@RequestBody InputBeanGeneral2 input, HttpServletRequest request) throws Exception {
         postFile(input);
