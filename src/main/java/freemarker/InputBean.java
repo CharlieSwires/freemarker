@@ -1,11 +1,12 @@
 package freemarker;
 
+import java.util.Date;
+
 public class InputBean {
 
     private String fileCSV;
     private String headingsCSV;
     private String printedby;
-    private String datetime;
     private String title;
 
     public InputBean() {
@@ -33,14 +34,6 @@ public class InputBean {
 
     public void setPrintedby(String printedby) {
         this.printedby = printedby;
-    }
-
-    public String getDatetime() {
-        return datetime;
-    }
-
-    public void setDatetime(String datetime) {
-        this.datetime = datetime;
     }
 
     public String getTitle() {

@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongodb.MongoBeanRepository;
+import com.mongodb.MongoBeanRepository2;
+import com.mongodb.MongoBeanRepository3;
 
 
 @RestController
@@ -37,6 +39,10 @@ public class RController  {
     private FileStorageService fileStorageService;
     @Autowired
     private MongoBeanRepository beanRepository;
+    @Autowired
+    private MongoBeanRepository2 beanRepository2;
+    @Autowired
+    private MongoBeanRepository3 beanRepository3;
 
     public RController(Freemarker service2, Encryption encryption2) {
         service = service2;
@@ -56,9 +62,10 @@ public class RController  {
     @PostMapping(path="TabularToPDF/columns/{cols}", produces="application/json", consumes="application/json")
     public ResponseEntity<ReturnBean> postFile(@PathVariable("cols") Integer cols, @RequestBody InputBean input) {
         String result=null;
+        Date date = new Date();
         try {
             result = service.convert(input.getTitle(),
-                    input.getDatetime(),
+                    date,
                     input.getPrintedby(),
                     input.getHeadingsCSV(),
                     input.getFileCSV(),
@@ -70,6 +77,9 @@ public class RController  {
         rb.setFileB64(result);
         Base64.Decoder b64d = Base64.getDecoder();
         rb.setSha1(encryption.sha1(b64d.decode(result)));
+        String hexString = encryption.byteArrayToHexString(b64d.decode(rb.getSha1()));
+        beanRepository3.save(service.converter(input,rb,"result"+hexString+".pdf",date));
+
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
     /**
@@ -85,9 +95,12 @@ public class RController  {
     @PostMapping(path="GeneralToPDF", produces="application/json", consumes="application/json")
     public ResponseEntity<ReturnBean> postFile(@RequestBody InputBeanGeneral input) {
         String result=null;
+        Date date = new Date();
         try {
             result = service.convert(input.getInputFTL(),
-                    input.getReplacementStringsCSV());
+                    input.getReplacementStringsCSV(),
+                    input.getWho(),
+                    date);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -95,6 +108,8 @@ public class RController  {
         rb.setFileB64(result);
         Base64.Decoder b64d = Base64.getDecoder();
         rb.setSha1(encryption.sha1(b64d.decode(result)));
+        String hexString = encryption.byteArrayToHexString(b64d.decode(rb.getSha1()));
+        beanRepository2.save(service.converter(input,rb,"result"+hexString+".pdf",date));
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
     /**
@@ -119,7 +134,7 @@ public class RController  {
         rb.setFileB64(result);
         Base64.Decoder b64d = Base64.getDecoder();
         rb.setSha1(encryption.sha1(b64d.decode(result)));
-        String hexString = encryption.byteArrayToHexString(b64d.decode(encryption.sha1((b64d.decode(result)))));
+        String hexString = encryption.byteArrayToHexString(b64d.decode(rb.getSha1()));
         beanRepository.save(service.converter(input,rb,"result"+hexString+".pdf",date));
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }

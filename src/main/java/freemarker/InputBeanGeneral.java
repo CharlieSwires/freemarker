@@ -4,6 +4,7 @@ public class InputBeanGeneral {
 
     private String inputFTL;
     private String replacementStringsCSV;
+    private String who;
     
     public InputBeanGeneral() {
         
@@ -26,5 +27,15 @@ public class InputBeanGeneral {
 
     public void setReplacementStringsCSV(String replacementStringsCSV) {
         this.replacementStringsCSV = replacementStringsCSV;
+    }
+
+
+    public String getWho() {
+        return who;
+    }
+
+
+    public void setWho(String who) {
+        this.who = who;
     }
 }

@@ -25,6 +25,8 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.MongoBean;
+import com.mongodb.MongoBean2;
+import com.mongodb.MongoBean3;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -37,7 +39,7 @@ public class Freemarker {
     static boolean doneOnce = false;
     @SuppressWarnings("unchecked")
     public synchronized String convert(String title,
-            String datetime,
+            Date date,
             String printedby,
             String csvHeadings,
             String csvList,
@@ -67,7 +69,9 @@ public class Freemarker {
 
         input.put("title", title);
         input.put("printedby", printedby);
-        input.put("datetime", datetime);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        input.put("datetime", ""+cal.get(Calendar.DATE)+"/"+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.YEAR));
 
         List systems = new ArrayList();
 
@@ -209,7 +213,7 @@ public class Freemarker {
         fw.close();
         return true;
     } 
-    public synchronized String convert(String inputHTML, String replacementStrings) throws Exception {
+    public synchronized String convert(String inputHTML, String replacementStrings, String who, Date date) throws Exception {
 
         FileWriter fw = new FileWriter(new File("/usr/local/tomcat/input.ftl"));
         fw.write(inputHTML);
@@ -230,6 +234,10 @@ public class Freemarker {
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 
         Map<String, Object> input = new HashMap<String, Object>();
+        input.put("who", who);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        input.put("datePrinted", ""+cal.get(Calendar.DATE)+"/"+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.YEAR));
 
         Reader in = new StringReader(replacementStrings);
         Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
@@ -507,6 +515,31 @@ public class Freemarker {
         }
         mb.setArrayOfItems(arrayOfItems);
         
+        return mb;
+    }
+
+    public MongoBean2 converter(InputBeanGeneral input, ReturnBean rb, String outFile, Date date) {
+        MongoBean2 mb = new MongoBean2();
+        mb.setDateRequested(date);
+        mb.setFileB64(rb.getFileB64());
+        mb.setInputFTL(input.getInputFTL());
+        mb.setOutfilename(outFile);
+        mb.setReplacementStringsCSV(input.getReplacementStringsCSV());
+        mb.setSha1(rb.getSha1());
+        mb.setWho(input.getWho());
+        return mb;
+    }
+
+    public MongoBean3 converter(InputBean input, ReturnBean rb, String string, Date date) {
+        MongoBean3 mb = new MongoBean3();
+        mb.setDateRequested(date);
+        mb.setFileB64(rb.getFileB64());
+        mb.setFileCSV(input.getFileCSV());
+        mb.setHeadingsCSV(input.getHeadingsCSV());
+        mb.setOutfilename(string);
+        mb.setSha1(rb.getSha1());
+        mb.setTitle(input.getTitle());
+        mb.setWho(input.getPrintedby());
         return mb;
     }
 }
