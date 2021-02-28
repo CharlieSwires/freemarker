@@ -12,7 +12,10 @@ build
 
 <p>produces freemarker.war in target</p>
 
-
+Compass
+-------
+<p>Collection names</p>
+FTLFile, General, General2, HTML, Tables
 
 deploy
 ------
