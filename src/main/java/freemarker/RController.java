@@ -208,6 +208,12 @@ public class RController  {
     }
     /**
      * Compares the given resultFilename with one generated from the file.
+     * Do this before calling if you are in Java.
+     * 
+     * byte[] bytes = Files.readAllBytes(Paths.get(filePath));
+     * Base64.Encoder b64e = Base64.getEncoder();
+     * String stringB64 = b64e.encodeToString(bytes);
+     * 
      * @param input
      * @return
      */
