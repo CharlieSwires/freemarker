@@ -27,6 +27,8 @@ import org.springframework.stereotype.Service;
 import com.mongodb.MongoBean;
 import com.mongodb.MongoBean2;
 import com.mongodb.MongoBean3;
+import com.mongodb.MongoBean4;
+import com.mongodb.MongoBean5;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -544,6 +546,25 @@ public class Freemarker {
         mb.setSha1(rb.getSha1());
         mb.setTitle(input.getTitle());
         mb.setWho(input.getPrintedby());
+        return mb;
+    }
+
+    public MongoBean4 converter(InputHTMLString input, ReturnBean rb, String outFile, Date date) {
+        MongoBean4 mb = new MongoBean4();
+        mb.setDateRequested(date);
+        mb.setFileB64(rb.getFileB64());
+        mb.setSha1(rb.getSha1());
+        mb.setWho(input.getWho());
+        mb.setInputHTML(input.getInputHTML());
+        return mb;
+    }
+
+    public MongoBean5 converter(InputBeanInit input, Date date) {
+        MongoBean5 mb = new MongoBean5();
+        mb.setDateRequested(date);
+        mb.setFilename(input.getFilename());
+        mb.setInputFTL(input.getInputFTL());
+        mb.setWho(input.getWho());
         return mb;
     }
 }

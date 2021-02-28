@@ -7,6 +7,7 @@ package freemarker;
 public class InputBeanInit {
     private String inputFTL;
     private String filename;
+    private String who;
     
     public InputBeanInit() {
         
@@ -29,5 +30,15 @@ public class InputBeanInit {
 
     public void setFilename(String filename) {
         this.filename = filename;
+    }
+
+
+    public String getWho() {
+        return who;
+    }
+
+
+    public void setWho(String who) {
+        this.who = who;
     }
 }
