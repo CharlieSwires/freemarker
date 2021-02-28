@@ -207,16 +207,16 @@ public class RController  {
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
     /**
-     * Compares the given sha1 with one generated from the file.
+     * Compares the given resultFilename with one generated from the file.
      * @param input
      * @return
      */
     @PostMapping(path="isTamperedWith", produces="application/json", consumes="application/json")
     public ResponseEntity<Boolean> isTamperedWith(@RequestBody TamperedBean input) {
         Base64.Decoder b64d = Base64.getDecoder();
-        return new ResponseEntity<Boolean>(!input.getSha1().equals(
-                encryption.sha1(
-                        b64d.decode(input.getFileB64()))), HttpStatus.OK);
+        return new ResponseEntity<Boolean>(!input.getResultFilename().equals(
+                "result"+encryption.byteArrayToHexString(b64d.decode(encryption.sha1(
+                        b64d.decode(input.getFileB64()))))+".pdf"), HttpStatus.OK);
     }
     /**
      * test.pdf -> result<sha1HexString>.pdf downloads to the browser

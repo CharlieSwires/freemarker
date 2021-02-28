@@ -7,20 +7,10 @@ package freemarker;
 public class TamperedBean {
 
     private String fileB64;
-    private String sha1;
+    private String resultFilename;
 
     public TamperedBean() {
     }
-
- 
-    public String getSha1() {
-        return sha1;
-    }
-
-    public void setSha1(String sha1) {
-        this.sha1 = sha1;
-    }
-
 
     public String getFileB64() {
         return fileB64;
@@ -29,6 +19,14 @@ public class TamperedBean {
 
     public void setFileB64(String fileB64) {
         this.fileB64 = fileB64;
+    }
+
+    public String getResultFilename() {
+        return resultFilename;
+    }
+
+    public void setResultFilename(String resultFilename) {
+        this.resultFilename = resultFilename;
     }
 
    
