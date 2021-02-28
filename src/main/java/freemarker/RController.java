@@ -69,7 +69,6 @@ public class RController  {
      * @param input
      * @return
      */
-    @PostMapping(path="TabularToPDF/columns/{cols}", produces="application/json", consumes="application/json")
     private ResponseEntity<ReturnBean> postFile(@PathVariable("cols") Integer cols, @RequestBody InputBean input) {
         String result=null;
         Date date = new Date();
@@ -102,7 +101,6 @@ public class RController  {
      * @param input
      * @return
      */
-    @PostMapping(path="GeneralToPDF", produces="application/json", consumes="application/json")
     private ResponseEntity<ReturnBean> postFile(@RequestBody InputBeanGeneral input) {
         String result=null;
         Date date = new Date();
@@ -131,7 +129,6 @@ public class RController  {
      * @param input
      * @return
      */
-    @PostMapping(path="GeneralToPDF2", produces="application/json", consumes="application/json")
     private ResponseEntity<ReturnBean> postFile(@RequestBody InputBeanGeneral2 input) {
         String result=null;
         Date date = new Date();
@@ -192,7 +189,6 @@ public class RController  {
      * @param input
      * @return
      */
-    @PostMapping(path="ToPDF", produces="application/json", consumes="application/json")
     private ResponseEntity<ReturnBean> toPDF(@RequestBody InputHTMLString input) {
         String result=null;
         Date date = new Date();
@@ -229,7 +225,7 @@ public class RController  {
      * @throws Exception
      */
     @GetMapping("downloadFile")
-    private ResponseEntity<Resource> downloadFile(HttpServletRequest request) throws Exception {
+    public ResponseEntity<Resource> downloadFile(HttpServletRequest request) throws Exception {
         File file= new File("test.pdf");
         // ...(file is initialised)...
         byte[] fileContent = Files.readAllBytes(file.toPath());
