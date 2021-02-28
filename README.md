@@ -22,23 +22,25 @@ deploy
 
 postman
 -------
-<p>http://localhost:8888/freemarker/TabularToPDF/columns/3</p>
-{ "file" : "1,2,3"
-}
-
-<p>http://localhost:8888/freemarker/TabularToPDF/columns/3</p>
-{ "file" : "hello,there,finally"
-}
-
+<p>http://localhost:8888/freemarker/TabularToPDFAndDownload/columns/3</p>
+{
+    "title": "The Title",
+    "printedby": "Charles Swires",
+   "headingsCSV":"one,two,three",
+    "fileCSV": "hello,there,friend\n1,2,3\n"
+ }
 <p>Supports 1-5 columns can be extended simply.</p>
-<p>http://localhost:8888/freemarker/GeneralToPDF</p>
+
+<p>http://localhost:8888/freemarker/GeneralToPDFAndDownload</p>
 {
+    "who": "Charlie Swires",
     "inputHTML" : ".......",
-    "replacementStrings" : "title,my title1\nnext,my next2\n"
+    "replacementStringsCSV" : "title,my title1\nnext,my next2\n"
 }
 
-<p>http://localhost:8888/freemarker/GeneralToPDF2</p>
+<p>http://localhost:8888/freemarker/GeneralToPDF2AndDownload</p>
 {
+    "who": "Charlie Swires",
 "headerHTML": ".........",
 "bodyFTL":".........",
 "footerHTML": "...........",
@@ -71,6 +73,7 @@ postman
 
 <p>http://localhost:8888/freemarker/Init.</p>
 {
+"who": "Charlie Swires",
     "inputFTL" : "<html><head><title>Charlie's Magic</title></head><body><#list systems as system><p>$system_index + 1}</p><p>${system.auditId},${system.objectId},${system.objectTitle},${system.objectType},${system.stage},${system.commChnl},${system.commLang},${system.plndStrtDt},${system.plndEndDt},${system.actlEndDt},${system.status},${system.mjrNc},${system.nextRevDt},${system.auditee},${system.auditeeName},${system.auditeeEmail},${system.auditeeLocations},${system.auditeeTimezone},${system.creBy},${system.creAt},${system.updBy},${system.updAt}</p></#list></body></html>",
 "filename": "columnsPartha1Template.ftl"
 }
@@ -187,8 +190,9 @@ postman
     "sha1": "cGVjxRZmKwgwrCrhWDHYMSIfMvQ="
 }
 
-<p>http://localhost:8888/freemarker/ToPDF.</p>
+<p>http://localhost:8888/freemarker/ToPDFAndDownload.</p>
 {
+    "who": "Charlie",
     "inputHTML": "..........."
 }
 
