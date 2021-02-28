@@ -236,5 +236,26 @@ public class RController  {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
+    
+    @PostMapping(path="TabularToPDFAndDownload/columns/{cols}", produces="application/json", consumes="application/json")
+    public synchronized ResponseEntity<Resource> postFileAndDownload(@PathVariable("cols") Integer cols, @RequestBody InputBean input, HttpServletRequest request) throws Exception {
+        postFile(cols, input);
+        return downloadFile(request);
+
+    }
+ 
+    @PostMapping(path="GeneralToPDFAndDownload", produces="application/json", consumes="application/json")
+    public synchronized ResponseEntity<Resource> postFileAndDownload(@RequestBody InputBeanGeneral input, HttpServletRequest request) throws Exception {
+        postFile(input);
+        return downloadFile(request);
+
+    }
+
+    @PostMapping(path="GeneralToPDF2AndDownload", produces="application/json", consumes="application/json")
+    public synchronized ResponseEntity<Resource> postFileAndDownload(@RequestBody InputBeanGeneral2 input, HttpServletRequest request) throws Exception {
+        postFile(input);
+        return downloadFile(request);
+    }
+
 
 }
