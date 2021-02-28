@@ -190,7 +190,7 @@ postman
 <p>http://localhost:8888/freemarker/isTamperedWith.</p>
 {
     "fileB64": ".......",
-    "sha1": "cGVjxRZmKwgwrCrhWDHYMSIfMvQ="
+    "resultFilename": "result04FE1FCBB58C1DF293706A76B660102E1FA11AE0.pdf"
 }
 
 <p>http://localhost:8888/freemarker/ToPDFAndDownload.</p>
