@@ -170,8 +170,7 @@ public class RController  {
      * @param input
      * @return
      */
-    @PostMapping(path="Partha1ToPDF", produces="application/json", consumes="application/json")
-    public ResponseEntity<ReturnBean> partha1File(@RequestBody Partha1InputBean[] input) {
+    private ResponseEntity<ReturnBean> partha1File(@RequestBody Partha1InputBean[] input) {
         String result=null;
         try {
             result = service.convert2(input);
