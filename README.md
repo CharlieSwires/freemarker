@@ -26,6 +26,7 @@ deploy
 postman
 -------
 <p>http://localhost:8888/freemarker/TabularToPDFAndDownload/columns/3</p>
+<p>http://localhost:8888/freemarker/tabularToPDF/columns/3</p>
 {
     "title": "The Title",
     "printedby": "Charles Swires",
@@ -35,13 +36,15 @@ postman
 <p>Supports 1-5 columns can be extended simply.</p>
 
 <p>http://localhost:8888/freemarker/GeneralToPDFAndDownload</p>
+<p>http://localhost:8888/freemarker/generalToPDF</p>
 {
     "who": "Charlie Swires",
     "inputHTML" : ".......",
     "replacementStringsCSV" : "title,my title1\nnext,my next2\n"
 }
 
-<p>http://localhost:8888/freemarker/GeneralToPDF2AndDownload</p>
+<p>http://localhost:8888/freemarker/GeneralArrayToPDFAndDownload</p>
+<p>http://localhost:8888/freemarker/generalArrayToPDF</p>
 {
     "who": "Charlie Swires",
 "headerHTML": ".........",
@@ -74,119 +77,6 @@ postman
 ]
 }
 
-<p>http://localhost:8888/freemarker/Init.</p>
-{
-"who": "Charlie Swires",
-    "inputFTL" : "<html><head><title>Charlie's Magic</title></head><body><#list systems as system><p>$system_index + 1}</p><p>${system.auditId},${system.objectId},${system.objectTitle},${system.objectType},${system.stage},${system.commChnl},${system.commLang},${system.plndStrtDt},${system.plndEndDt},${system.actlEndDt},${system.status},${system.mjrNc},${system.nextRevDt},${system.auditee},${system.auditeeName},${system.auditeeEmail},${system.auditeeLocations},${system.auditeeTimezone},${system.creBy},${system.creAt},${system.updBy},${system.updAt}</p></#list></body></html>",
-"filename": "columnsPartha1Template.ftl"
-}
-
-<p>http://localhost:8888/freemarker/Partha1ToPDFAndDownload.</p>
-[
-  {
-    "auditId": 1,
-    "objectId": "prj5698",
-    "objectTitle": "Project 5698",
-    "objectType": "PROJECT",
-    "stage": "Stage-1",
-    "commChnl": "WEB",
-    "commLang": "FRENCH",
-    "plndStrtDt": "2021-02-20T14:12:18.038Z",
-    "plndEndDt": "2021-02-20T15:12:18.038Z",
-    "actlEndDt": "2021-02-20T15:12:18.038Z",
-    "status": "COMPLETED",
-    "mjrNc": "1",
-    "nextRevDt": "2021-02-20T15:12:18.038Z",
-    "auditee": "d516d648-646d-4522-abaa-5da6a8f94b64",
-    "auditeeName": "Roger Moore",
-    "auditeeEmail": "rm@mail.com",
-    "auditeeLocations": "UK",
-    "auditeeTimezone": "GMT",
-    "creBy": "be5b8aef-9218-4391-b74b-568e8146476b",
-    "creAt": "2021-02-20T13:43:12.143Z",
-    "updBy": "be5b8aef-9218-4391-b74b-568e8146476b",
-    "updAt": "2021-02-20T14:12:18.821Z",
-    "findingsText": [
-      {
-        "type": "Type1",
-        "note": "Findings...."
-      },
-      {
-        "type": "Type1",
-        "note": "Findings...."
-      }
-    ]
-  },
-  {
-    "auditId": 2,
-    "objectId": "prj5698",
-    "objectTitle": "Project 5698",
-    "objectType": "PROJECT",
-    "stage": "Stage-1",
-    "commChnl": "WEB",
-    "commLang": "FRENCH",
-    "plndStrtDt": "2021-02-20T14:12:18.038Z",
-    "plndEndDt": "2021-02-20T15:12:18.038Z",
-    "actlEndDt": "2021-02-20T15:12:18.038Z",
-    "status": "COMPLETED",
-    "mjrNc": "1",
-    "nextRevDt": "2021-02-20T15:12:18.038Z",
-    "auditee": "d516d648-646d-4522-abaa-5da6a8f94b64",
-    "auditeeName": "Roger Moore",
-    "auditeeEmail": "rm@mail.com",
-    "auditeeLocations": "UK",
-    "auditeeTimezone": "GMT",
-    "creBy": "be5b8aef-9218-4391-b74b-568e8146476b",
-    "creAt": "2021-02-20T13:43:12.143Z",
-    "updBy": "be5b8aef-9218-4391-b74b-568e8146476b",
-    "updAt": "2021-02-20T14:12:18.821Z",
-    "findingsText": [
-      {
-        "type": "Type1",
-        "note": "Findings...."
-      },
-      {
-        "type": "Type1",
-        "note": "Findings...."
-      }
-    ]
-  },
-  {
-    "auditId": 3,
-    "objectId": "prj5698",
-    "objectTitle": "Project 5698",
-    "objectType": "PROJECT",
-    "stage": "Stage-1",
-    "commChnl": "WEB",
-    "commLang": "FRENCH",
-    "plndStrtDt": "2021-02-20T14:12:18.038Z",
-    "plndEndDt": "2021-02-20T15:12:18.038Z",
-    "actlEndDt": "2021-02-20T15:12:18.038Z",
-    "status": "COMPLETED",
-    "mjrNc": "1",
-    "nextRevDt": "2021-02-20T15:12:18.038Z",
-    "auditee": "d516d648-646d-4522-abaa-5da6a8f94b64",
-    "auditeeName": "Roger Moore",
-    "auditeeEmail": "rm@mail.com",
-    "auditeeLocations": "UK",
-    "auditeeTimezone": "GMT",
-    "creBy": "be5b8aef-9218-4391-b74b-568e8146476b",
-    "creAt": "2021-02-20T13:43:12.143Z",
-    "updBy": "be5b8aef-9218-4391-b74b-568e8146476b",
-    "updAt": "2021-02-20T14:12:18.821Z",
-    "findingsText": [
-      {
-        "type": "Type1",
-        "note": "Findings...."
-      },
-      {
-        "type": "Type1",
-        "note": "Findings...."
-      }
-    ]
-  }
-]
-
 <p>http://localhost:8888/freemarker/isTamperedWith.</p>
 {
     "fileB64": ".......",
@@ -194,6 +84,7 @@ postman
 }
 
 <p>http://localhost:8888/freemarker/ToPDFAndDownload.</p>
+<p>http://localhost:8888/freemarker/toPDF.</p>
 {
     "who": "Charlie",
     "inputHTML": "..........."
