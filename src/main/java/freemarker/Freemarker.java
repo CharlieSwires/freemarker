@@ -29,6 +29,7 @@ import com.mongodb.MongoBean2;
 import com.mongodb.MongoBean3;
 import com.mongodb.MongoBean4;
 import com.mongodb.MongoBean5;
+import com.mongodb.MongoBean6;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -564,6 +565,26 @@ public class Freemarker {
         mb.setDateRequested(date);
         mb.setFilename(input.getFilename());
         mb.setInputFTL(input.getInputFTL());
+        mb.setWho(input.getWho());
+        return mb;
+    }
+
+    public MongoBean6 converter(TemplateBean input, Date date) {
+        MongoBean6 mb = new MongoBean6();
+        mb.setDateRequested(date);;
+        mb.setFooterHTML(input.getFooterHTML());
+        mb.setHeaderHTML(input.getHeaderHTML());
+        mb.setInsideBodyFTL(input.getInsideBodyFTL());
+        mb.setName(input.getName());
+        mb.setWho(input.getWho());
+        return mb;
+    }
+    public TemplateBean converter(MongoBean6 input) {
+        TemplateBean mb = new TemplateBean();
+        mb.setFooterHTML(input.getFooterHTML());
+        mb.setHeaderHTML(input.getHeaderHTML());
+        mb.setInsideBodyFTL(input.getInsideBodyFTL());
+        mb.setName(input.getName());
         mb.setWho(input.getWho());
         return mb;
     }

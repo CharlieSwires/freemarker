@@ -26,7 +26,7 @@ import com.mongodb.MongoBeanRepository;
 import com.mongodb.MongoBeanRepository2;
 import com.mongodb.MongoBeanRepository3;
 import com.mongodb.MongoBeanRepository4;
-import com.mongodb.MongoBeanRepository5;
+import com.mongodb.MongoBeanRepository6;
 
 /**
  * Copyright 2021 Charles Swires All Rights Reserved
@@ -51,8 +51,10 @@ public class RController  {
     private MongoBeanRepository3 beanRepository3;
     @Autowired
     private MongoBeanRepository4 beanRepository4;
+//    @Autowired
+//    private MongoBeanRepository5 beanRepository5;
     @Autowired
-    private MongoBeanRepository5 beanRepository5;
+    private MongoBeanRepository6 beanRepository6;
 
     public RController(Freemarker service2, Encryption encryption2) {
         service = service2;
@@ -208,6 +210,29 @@ public class RController  {
         return new ResponseEntity<Boolean>(!input.getResultFilename().equals(
                 "result"+encryption.byteArrayToHexString(b64d.decode(encryption.sha1(
                         b64d.decode(input.getFileB64()))))+".pdf"), HttpStatus.OK);
+    }
+    /**
+     * Save the template to the mongo DB.
+     * @param input
+     * @return
+     */
+    @PostMapping(path="saveTemplate", produces="application/json", consumes="application/json")
+    public synchronized ResponseEntity<Boolean> saveTemplate(@RequestBody TemplateBean input) {
+        Date date = new Date();
+        beanRepository6.deleteByName(input.getName());
+        beanRepository6.save(service.converter(input, date));
+        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+    }
+    /**
+     * Load the template form the mongo DB.
+     * @param name
+     * @return
+     */
+    @GetMapping(path="loadTemplate/{name}", produces="application/json")
+    public ResponseEntity<TemplateBean> loadTemplate(@PathVariable("name") String name) {
+        
+        TemplateBean tb = service.converter(beanRepository6.findByName(name));
+        return new ResponseEntity<TemplateBean>(tb, HttpStatus.OK);
     }
     /**
      * test.pdf -> result<sha1HexString>.pdf downloads to the browser
