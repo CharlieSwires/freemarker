@@ -167,7 +167,7 @@ public class RController  {
 //            throw new RuntimeException(e);
 //        }
 //        return new ResponseEntity<Boolean>(result, HttpStatus.OK);
-    }
+//    }
     /**
      * Converts a HTML string to PDF
      * @param input
