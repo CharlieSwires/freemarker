@@ -25,6 +25,17 @@ deploy
 
 postman
 -------
+<p>http://localhost:8888/freemarker/saveTemplate</p>
+{
+  "name": "Template1",
+  "who": "Charlie Swires",
+  "headerHTML": "<html><body>",
+  "footerHTML": "</body></html>",
+  "insideBodyFTL": "<table width=\"100%\"><tr><td align=\"left\"><h2>${who}</h2></td><td align=\"right\"><h2>${datePrinted}</h2></td></tr></table><br><h1>${one}</h1><br><h1>${two}</h1><br><table width=\"100%\" border=\"4px\"><#list systems as system><tr><td border=\"1px\" width=\"5%\">${system_index + 1}</td><td border=\"1px\"><#if system.type??>${system.type}<#else>null</#if></td><td border=\"1px\"><#if system.note??>${system.note}<#else>null</#if></td></tr></#list></table>"
+}
+
+<p>http://localhost:8888/freemarker/loadTemplate/Template1</p>
+
 <p>http://localhost:8888/freemarker/TabularToPDFAndDownload/columns/3</p>
 <p>http://localhost:8888/freemarker/tabularToPDF/columns/3</p>
 {
