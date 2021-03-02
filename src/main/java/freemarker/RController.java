@@ -148,25 +148,25 @@ public class RController  {
         beanRepository.save(service.converter(input,rb,"result"+hexString+".pdf",date));
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
-    /**
-     * Saves the template to file
-     * @param input
-     * @return
-     */
-    @PostMapping(path="Init", produces="application/json", consumes="application/json")
-    public ResponseEntity<Boolean> initFile(@RequestBody InputBeanInit input) {
-        Boolean result=null;
-        try {
-            Date date = new Date();
-            result = service.init(input.getInputFTL(),
-                    input.getFilename());
-            beanRepository5.save(service.converter(input,date));
-
-        } catch (Exception e) {
-            result = false;
-            throw new RuntimeException(e);
-        }
-        return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+//    /**
+//     * Saves the template to file
+//     * @param input
+//     * @return
+//     */
+//    @PostMapping(path="Init", produces="application/json", consumes="application/json")
+//    public ResponseEntity<Boolean> initFile(@RequestBody InputBeanInit input) {
+//        Boolean result=null;
+//        try {
+//            Date date = new Date();
+//            result = service.init(input.getInputFTL(),
+//                    input.getFilename());
+//            beanRepository5.save(service.converter(input,date));
+//
+//        } catch (Exception e) {
+//            result = false;
+//            throw new RuntimeException(e);
+//        }
+//        return new ResponseEntity<Boolean>(result, HttpStatus.OK);
     }
     /**
      * Converts a HTML string to PDF
@@ -280,7 +280,7 @@ public class RController  {
      * @return
      * @throws Exception
      */
-    @PostMapping(path="GeneralToPDF2AndDownload", consumes="application/json")
+    @PostMapping(path="GeneralArrayToPDFAndDownload", consumes="application/json")
     public synchronized ResponseEntity<Resource> postFileAndDownload(@RequestBody InputBeanGeneral2 input, HttpServletRequest request) throws Exception {
         postFile(input);
         return downloadFile(request);
