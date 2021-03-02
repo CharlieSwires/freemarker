@@ -69,7 +69,8 @@ public class RController  {
      * @param input
      * @return
      */
-    private ResponseEntity<ReturnBean> postFile(@PathVariable("cols") Integer cols, @RequestBody InputBean input) {
+    @PostMapping(path="tabularToPDF/columns/{cols}", produces="application/json", consumes="application/json")
+    public ResponseEntity<ReturnBean> postFile(@PathVariable("cols") Integer cols, @RequestBody InputBean input) {
         String result=null;
         Date date = new Date();
         try {
@@ -101,7 +102,8 @@ public class RController  {
      * @param input
      * @return
      */
-    private ResponseEntity<ReturnBean> postFile(@RequestBody InputBeanGeneral input) {
+    @PostMapping(path="generalToPDF", produces="application/json", consumes="application/json")
+    public ResponseEntity<ReturnBean> postFile(@RequestBody InputBeanGeneral input) {
         String result=null;
         Date date = new Date();
         try {
@@ -129,7 +131,8 @@ public class RController  {
      * @param input
      * @return
      */
-    private ResponseEntity<ReturnBean> postFile(@RequestBody InputBeanGeneral2 input) {
+    @PostMapping(path="generalArrayToPDF", produces="application/json", consumes="application/json")
+    public ResponseEntity<ReturnBean> postFile(@RequestBody InputBeanGeneral2 input) {
         String result=null;
         Date date = new Date();
         try {
@@ -166,29 +169,12 @@ public class RController  {
         return new ResponseEntity<Boolean>(result, HttpStatus.OK);
     }
     /**
-     * Converts an array of Partha1InputBean to PDF via columnsPartha1Template.ftl
-     * @param input
-     * @return
-     */
-    private ResponseEntity<ReturnBean> partha1File(@RequestBody Partha1InputBean[] input) {
-        String result=null;
-        try {
-            result = service.convert2(input);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        ReturnBean rb = new ReturnBean();
-        rb.setFileB64(result);
-        Base64.Decoder b64d = Base64.getDecoder();
-        rb.setSha1(encryption.sha1(b64d.decode(result)));
-        return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
-    }
-    /**
      * Converts a HTML string to PDF
      * @param input
      * @return
      */
-    private ResponseEntity<ReturnBean> toPDF(@RequestBody InputHTMLString input) {
+    @PostMapping(path="toPDF", produces="application/json", consumes="application/json")
+    public ResponseEntity<ReturnBean> toPDF(@RequestBody InputHTMLString input) {
         String result=null;
         Date date = new Date();
         try {
@@ -309,19 +295,6 @@ public class RController  {
     @PostMapping(path="ToPDFAndDownload", consumes="application/json")
     public ResponseEntity<Resource> toPDFAndDownload(@RequestBody InputHTMLString input,HttpServletRequest request) throws Exception {
         toPDF(input);
-        return downloadFile(request);
-    }
- 
-    /**
-     * Combination method
-     * @param input
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    @PostMapping(path="Partha1ToPDFAndDownload", produces="application/json", consumes="application/json")
-    public ResponseEntity<Resource> partha1FileAndDownload(@RequestBody Partha1InputBean[] input, HttpServletRequest request) throws Exception {
-        partha1File(input);
         return downloadFile(request);
     }
  
