@@ -579,13 +579,14 @@ public class Freemarker {
         mb.setWho(input.getWho());
         return mb;
     }
-    public TemplateBean converter(MongoBean6 input) {
-        TemplateBean mb = new TemplateBean();
+    public TemplateBeanResponse converter(MongoBean6 input) {
+        TemplateBeanResponse mb = new TemplateBeanResponse();
         mb.setFooterHTML(input.getFooterHTML());
         mb.setHeaderHTML(input.getHeaderHTML());
         mb.setInsideBodyFTL(input.getInsideBodyFTL());
         mb.setName(input.getName());
         mb.setWho(input.getWho());
+        mb.setDateStored(input.getDateRequested());
         return mb;
     }
 }

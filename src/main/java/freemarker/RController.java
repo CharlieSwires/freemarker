@@ -229,10 +229,10 @@ public class RController  {
      * @return
      */
     @GetMapping(path="loadTemplate/{name}", produces="application/json")
-    public ResponseEntity<TemplateBean> loadTemplate(@PathVariable("name") String name) {
+    public ResponseEntity<TemplateBeanResponse> loadTemplate(@PathVariable("name") String name) {
         
-        TemplateBean tb = service.converter(beanRepository6.findByName(name));
-        return new ResponseEntity<TemplateBean>(tb, HttpStatus.OK);
+        TemplateBeanResponse tb = service.converter(beanRepository6.findByName(name));
+        return new ResponseEntity<TemplateBeanResponse>(tb, HttpStatus.OK);
     }
     /**
      * test.pdf -> result<sha1HexString>.pdf downloads to the browser
