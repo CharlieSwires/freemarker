@@ -15,7 +15,7 @@ build
 Compass
 -------
 <p>Collection names</p>
-FTLFile, General, General2, HTML, Tables
+FTLFile, General, General2, HTML, Tables and Templates
 
 deploy
 ------
