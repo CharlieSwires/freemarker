@@ -51,6 +51,12 @@ public class Freemarker {
             String csvHeadings,
             String csvList,
             int columns) throws Exception {
+        assert(title != null);
+        assert(date != null);
+        assert(printedby != null);
+        assert(csvHeadings != null);
+        assert(csvList != null);
+
         // 1. Configure FreeMarker
         //
         // You should do this ONLY ONCE, when your application starts,
@@ -214,6 +220,8 @@ public class Freemarker {
     }
 
     public synchronized Boolean init(String inputHTML, String filename) throws Exception {
+        assert(inputHTML != null);
+        assert(filename != null);
 
         FileWriter fw = new FileWriter(new File("/usr/local/tomcat/"+filename));
         fw.write(inputHTML);
@@ -221,6 +229,10 @@ public class Freemarker {
         return true;
     } 
     public synchronized String convert(String inputHTML, String replacementStrings, String who, Date date) throws Exception {
+        assert(inputHTML != null);
+        assert(replacementStrings != null);
+        assert(who != null);
+        assert(date != null);
 
         FileWriter fw = new FileWriter(new File("/usr/local/tomcat/input.ftl"));
         fw.write(inputHTML);
@@ -258,7 +270,7 @@ public class Freemarker {
         Writer consoleWriter = new OutputStreamWriter(System.out);
         template.process(input, consoleWriter);
         consoleWriter.flush();
-        
+
         // For the sake of example, also write output into a file:
         Writer fileWriter = new FileWriter(new File("/usr/local/tomcat/output.html"));
         try {
@@ -271,6 +283,8 @@ public class Freemarker {
     }
 
     public synchronized String convert2(Partha1InputBean[] input2) throws Exception {
+
+        assert(input2 != null);
         // 1. Configure FreeMarker
         //
         // You should do this ONLY ONCE, when your application starts,
@@ -328,6 +342,7 @@ public class Freemarker {
         return publishPDF();
     }
     public synchronized String convert2(InputHTMLString input) throws Exception {
+        assert(input != null);
 
         FileWriter fw = new FileWriter(new File("/usr/local/tomcat/output.html"));
         fw.write(input.getInputHTML());
@@ -336,7 +351,7 @@ public class Freemarker {
         Writer consoleWriter = new OutputStreamWriter(System.out);
         consoleWriter.write(input.getInputHTML());
         consoleWriter.flush();
-       return publishPDF();
+        return publishPDF();
     }
 
 
@@ -407,7 +422,8 @@ public class Freemarker {
     }
 
     public synchronized String convert(InputBeanGeneral2 input, Date date) throws Exception {
-  
+        assert(input != null);
+        assert(date != null);
         Writer consoleWriter = new OutputStreamWriter(System.out);
         consoleWriter.write("=====================>"+input.toString());
         consoleWriter.flush();
@@ -435,24 +451,24 @@ public class Freemarker {
         // You will do this for several times in typical applications.
 
         // 2.1. Prepare the template input:
-        for(int i = 0; i< input.getArrayOfItems().length; i++)
+        for(int i = 0; input.getArrayOfItems() != null && i< input.getArrayOfItems().length; i++)
         {
             Map<String, Object> input2 = new HashMap<String, Object>();
             List<Object> systems = new ArrayList<Object>();
-            
+
             input2.put("who", input.getWho());
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             input2.put("datePrinted", ""+cal.get(Calendar.DATE)+"/"+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.YEAR));
-            
-            for(int j = 0; j < input.getArrayOfItems()[i].getFindingsText().length; j++ ) {
+
+            for(int j = 0; input.getArrayOfItems()[i].getFindingsText() != null && j < input.getArrayOfItems()[i].getFindingsText().length; j++ ) {
                 InputBeanGeneral2.ArrayOfItems.FindingsText item = new InputBeanGeneral2.ArrayOfItems.FindingsText();
                 item.setType(input.getArrayOfItems()[i].getFindingsText()[j].getType());
                 item.setNote(input.getArrayOfItems()[i].getFindingsText()[j].getNote());
                 systems.add((Object)item);
-                
+
             }
-            
+
             Reader in = new StringReader(input.getArrayOfItems()[i].getInputCSV());
             Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
             for (CSVRecord record : records) {
@@ -490,11 +506,16 @@ public class Freemarker {
         FileWriter fw1 = new FileWriter(new File("/usr/local/tomcat/output.html"));
         fw1.write(sb.toString());
         fw1.close();
-        
+
         return publishPDF();
     }
 
     public MongoBean converter(InputBeanGeneral2 input, ReturnBean rb, String outFile, Date date) {
+        assert(input != null);
+        assert(rb != null);
+        assert(outFile != null);
+        assert(date != null);
+
         MongoBean mb = new MongoBean();
         mb.setBodyFTL(input.getBodyFTL());
         mb.setDateRequested(date);
@@ -506,26 +527,35 @@ public class Freemarker {
         mb.setOutfilename(outFile);
         MongoBean.ArrayOfItems[] arrayOfItems = new MongoBean.ArrayOfItems[input.getArrayOfItems().length];
         int i = 0;
-        for(InputBeanGeneral2.ArrayOfItems item : input.getArrayOfItems()) {
-            MongoBean.ArrayOfItems arrayItem = new MongoBean.ArrayOfItems();
-            arrayItem.setInputCSV(item.getInputCSV());
-            MongoBean.ArrayOfItems.FindingsText[] findings = new MongoBean.ArrayOfItems.FindingsText[item.getFindingsText().length];
-            int j = 0;
-            for(InputBeanGeneral2.ArrayOfItems.FindingsText item2: item.getFindingsText()) {
-                MongoBean.ArrayOfItems.FindingsText findingItem = new MongoBean.ArrayOfItems.FindingsText();
-                findingItem.setType(item2.getType());
-                findingItem.setNote(item2.getNote());
-                findings[j++] = findingItem;
+        if(input.getArrayOfItems() != null) {
+            for(InputBeanGeneral2.ArrayOfItems item : input.getArrayOfItems()) {
+                MongoBean.ArrayOfItems arrayItem = new MongoBean.ArrayOfItems();
+                arrayItem.setInputCSV(item.getInputCSV());
+                MongoBean.ArrayOfItems.FindingsText[] findings = null;
+                if(item.getFindingsText() != null) {
+                    findings = new MongoBean.ArrayOfItems.FindingsText[item.getFindingsText().length];
+                    int j = 0;
+                    for(InputBeanGeneral2.ArrayOfItems.FindingsText item2: item.getFindingsText()) {
+                        MongoBean.ArrayOfItems.FindingsText findingItem = new MongoBean.ArrayOfItems.FindingsText();
+                        findingItem.setType(item2.getType());
+                        findingItem.setNote(item2.getNote());
+                        findings[j++] = findingItem;
+                    }
+                }
+                arrayItem.setFindingsText(findings);
+                arrayOfItems[i++] = arrayItem;
             }
-            arrayItem.setFindingsText(findings);
-            arrayOfItems[i++] = arrayItem;
         }
         mb.setArrayOfItems(arrayOfItems);
-        
+
         return mb;
     }
 
     public MongoBean2 converter(InputBeanGeneral input, ReturnBean rb, String outFile, Date date) {
+        assert(input != null);
+        assert(rb != null);
+        assert(outFile != null);
+        assert(date != null);
         MongoBean2 mb = new MongoBean2();
         mb.setDateRequested(date);
         mb.setFileB64(rb.getFileB64());
@@ -538,6 +568,10 @@ public class Freemarker {
     }
 
     public MongoBean3 converter(InputBean input, ReturnBean rb, String string, Date date) {
+        assert(input != null);
+        assert(rb != null);
+        assert(string != null);
+        assert(date != null);
         MongoBean3 mb = new MongoBean3();
         mb.setDateRequested(date);
         mb.setFileB64(rb.getFileB64());
@@ -551,6 +585,10 @@ public class Freemarker {
     }
 
     public MongoBean4 converter(InputHTMLString input, ReturnBean rb, String outFile, Date date) {
+        assert(input != null);
+        assert(rb != null);
+        assert(outFile != null);
+        assert(date != null);
         MongoBean4 mb = new MongoBean4();
         mb.setDateRequested(date);
         mb.setFileB64(rb.getFileB64());
