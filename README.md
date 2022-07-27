@@ -8,6 +8,8 @@ git clone https://github.com/CharlieSwires/freemarker</p>
 build
 -----
 <p>cd freemarker</p>
+<p>you'll need an application.properties file with the DB username and password
+URL</p>
 <p>mvn package</p>
 
 <p>produces freemarker.war in target</p>
