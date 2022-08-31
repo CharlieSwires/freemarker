@@ -1,7 +1,7 @@
 FROM tomcat:9.0
 ADD target/freemarker.war /usr/local/tomcat/webapps
 CMD ["catalina.sh", "run"]
-# install dependencies
+# install dependenciesa
 RUN apt-get update && apt-get install -y \
       curl \
       npm \
@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
       git;
 #RUN apt-get install ia32-libs-gtk
 #RUN /sbin/ldconfig -v
-RUN npm install npm@latest -g
+#RUN npm install npm@latest -g
 #RUN npm install puppeteer
 RUN  apt-get update \
      && apt-get install -y wget gnupg ca-certificates \
