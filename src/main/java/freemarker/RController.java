@@ -51,8 +51,8 @@ public class RController  {
     private MongoBeanRepository3 beanRepository3;
     @Autowired
     private MongoBeanRepository4 beanRepository4;
-//    @Autowired
-//    private MongoBeanRepository5 beanRepository5;
+    //    @Autowired
+    //    private MongoBeanRepository5 beanRepository5;
     @Autowired
     private MongoBeanRepository6 beanRepository6;
 
@@ -60,7 +60,7 @@ public class RController  {
         service = service2;
         encryption = encryption2;
     }
-    
+
     /**
      * Given cols columns and input choose the correct ftl file
      * and Columns?.java produce a table 1-5 columns in a PDF.
@@ -147,29 +147,33 @@ public class RController  {
         Base64.Decoder b64d = Base64.getDecoder();
         rb.setSha1(encryption.sha1(b64d.decode(result)));
         String hexString = encryption.byteArrayToHexString(b64d.decode(rb.getSha1()));
-        beanRepository.save(service.converter(input,rb,"result"+hexString+".pdf",date));
+        if (System.getenv("OVERRIDE_WITH_HTML") != null && System.getenv("OVERRIDE_WITH_HTML").equals("true")) {
+            beanRepository.save(service.converter(input,rb,"result.html",date));
+        } else {
+            beanRepository.save(service.converter(input,rb,"result"+hexString+".pdf",date));
+        }
         return new ResponseEntity<ReturnBean>(rb, HttpStatus.OK);
     }
-//    /**
-//     * Saves the template to file
-//     * @param input
-//     * @return
-//     */
-//    @PostMapping(path="Init", produces="application/json", consumes="application/json")
-//    public ResponseEntity<Boolean> initFile(@RequestBody InputBeanInit input) {
-//        Boolean result=null;
-//        try {
-//            Date date = new Date();
-//            result = service.init(input.getInputFTL(),
-//                    input.getFilename());
-//            beanRepository5.save(service.converter(input,date));
-//
-//        } catch (Exception e) {
-//            result = false;
-//            throw new RuntimeException(e);
-//        }
-//        return new ResponseEntity<Boolean>(result, HttpStatus.OK);
-//    }
+    //    /**
+    //     * Saves the template to file
+    //     * @param input
+    //     * @return
+    //     */
+    //    @PostMapping(path="Init", produces="application/json", consumes="application/json")
+    //    public ResponseEntity<Boolean> initFile(@RequestBody InputBeanInit input) {
+    //        Boolean result=null;
+    //        try {
+    //            Date date = new Date();
+    //            result = service.init(input.getInputFTL(),
+    //                    input.getFilename());
+    //            beanRepository5.save(service.converter(input,date));
+    //
+    //        } catch (Exception e) {
+    //            result = false;
+    //            throw new RuntimeException(e);
+    //        }
+    //        return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+    //    }
     /**
      * Converts a HTML string to PDF
      * @param input
@@ -230,7 +234,7 @@ public class RController  {
      */
     @GetMapping(path="loadTemplate/{name}", produces="application/json")
     public ResponseEntity<TemplateBeanResponse> loadTemplate(@PathVariable("name") String name) {
-        
+
         TemplateBeanResponse tb = service.converter(beanRepository6.findByName(name));
         return new ResponseEntity<TemplateBeanResponse>(tb, HttpStatus.OK);
     }
@@ -241,17 +245,32 @@ public class RController  {
      * @throws Exception
      */
     private ResponseEntity<Resource> downloadFile(HttpServletRequest request) throws Exception {
-        File file= new File("test.pdf");
+        File file;
+        if (System.getenv("OVERRIDE_WITH_HTML") != null && System.getenv("OVERRIDE_WITH_HTML").equals("true")) {
+            file= new File("test.html");
+        } else {
+            file= new File("test.pdf");
+        }
         // ...(file is initialised)...
         byte[] fileContent = Files.readAllBytes(file.toPath());
         Base64.Decoder b64d = Base64.getDecoder();
         String hexString = encryption.byteArrayToHexString(b64d.decode(encryption.sha1(fileContent)));
-        try (FileOutputStream fos = new FileOutputStream("result"+hexString+".pdf")) {
-            fos.write(fileContent);
-         }
+        Resource resource;
+        if (System.getenv("OVERRIDE_WITH_HTML") != null && System.getenv("OVERRIDE_WITH_HTML").equals("true")) {
+            try (FileOutputStream fos = new FileOutputStream("result.html")) {
+                fos.write(fileContent);
+                // Load file as Resource
+                resource = fileStorageService.loadFileAsResource("result"+".html");
+            }
+        }
+        else {
+            try (FileOutputStream fos = new FileOutputStream("result"+hexString+".pdf")) {
+                fos.write(fileContent);
+                // Load file as Resource
+                resource = fileStorageService.loadFileAsResource("result"+hexString+".pdf");
+            }
+        }
 
-        // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource("result"+hexString+".pdf");
         // Try to determine file's content type
         String contentType = null;
         try {
@@ -322,5 +341,5 @@ public class RController  {
         toPDF(input);
         return downloadFile(request);
     }
- 
+
 }

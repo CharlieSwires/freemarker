@@ -1,4 +1,4 @@
-freemarker
+ --env-file ./env.list eemarker
 ----------
 <p>in git bash
 git clone https://github.com/CharlieSwires/freemarker</p>
@@ -22,7 +22,7 @@ FTLFile, General, General2, HTML, Tables and Templates
 deploy
 ------
 <p>docker build --tag website:latest .</p>
-<p>docker run --name container1 -d -p 8888:8080 website:latest</p>
+<p>docker run  --env-file ./env.list --name container1 -d -p 8888:8080 website:latest</p>
 
 
 postman

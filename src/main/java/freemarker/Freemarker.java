@@ -365,6 +365,17 @@ public class Freemarker {
             //            builder.command("cmd.exe", "/c", "del test.pdf");
             //            builder.command("cmd.exe", "/c", "node index.js");
         } else {
+            if (System.getenv("OVERRIDE_WITH_HTML") != null && System.getenv("OVERRIDE_WITH_HTML").equals("true")) {
+                builder.command("sh", "-c", "cp output.html test.html");
+                builder.directory(new File("/usr/local/tomcat"));
+                Process process = builder.start(); 
+                File file = new File("/usr/local/tomcat/test.html");
+                byte[] fileContent = Files.readAllBytes(file.toPath());
+                Base64.Encoder b64e = Base64.getEncoder();
+                //        Base64.Decoder b64d = Base64.getDecoder();
+                String result = b64e.encodeToString(fileContent);
+                return result;
+            } 
             builder.command("sh", "-c", "chmod a+xr index.js");
             builder.directory(new File("/usr/local/tomcat"));
             Process process = builder.start();
@@ -385,15 +396,16 @@ public class Freemarker {
             //            builder.command("cmd.exe", "/c", "del test.pdf");
             //            builder.command("cmd.exe", "/c", "node index.js");
         } else {
-            builder.command("sh", "-c", "rm *.pdf");
-            builder.directory(new File("/usr/local/tomcat"));
-            Process process = builder.start();
-            builder.command("sh", "-c", "su user");
-            builder.directory(new File("/usr/local/tomcat"));
-            process = builder.start();
-            builder.command("sh", "-c", "node index.js");
-            builder.directory(new File("/usr/local/tomcat"));
-            process = builder.start();
+                builder.command("sh", "-c", "rm *.pdf");
+                builder.directory(new File("/usr/local/tomcat"));
+                Process process = builder.start();
+                builder.command("sh", "-c", "su user");
+                builder.directory(new File("/usr/local/tomcat"));
+                process = builder.start();
+                builder.command("sh", "-c", "node index.js");
+                builder.directory(new File("/usr/local/tomcat"));
+                process = builder.start();
+            
         }
         int i = 0;
         byte[] fileContent = null;
