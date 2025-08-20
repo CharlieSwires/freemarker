@@ -10,6 +10,7 @@ build
 <p>cd freemarker</p>
 <p>you'll need an application.properties file with the DB username and password
 URL</p>
+<p>and env.list</p>
 <p>mvn package</p>
 
 <p>produces freemarker.war in target</p>
