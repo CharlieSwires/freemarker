@@ -68,6 +68,40 @@ public class Encryption {
 
     }
 
+    public static String[] generateOld (){
+
+        try {
+
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+
+            // Create the public and private keys
+            KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA", "BC");
+            Base64.Encoder b64 = Base64.getEncoder();
+
+            SecureRandom sr;
+            try {
+                sr = SecureRandom.getInstanceStrong();   // may block on some systems
+            } catch (NoSuchAlgorithmException e) {
+                sr = new SecureRandom();                 // safe fallback
+            }    
+            
+            generator.initialize(KEY_LENGTH, sr);
+
+            KeyPair pair = generator.generateKeyPair();
+            Key pubKey = pair.getPublic();
+            Key privKey = pair.getPrivate();
+
+            String[] result = new String[2];
+            result[PUBLIC] = b64.encodeToString(pubKey.getEncoded());
+            result[PRIVATE] = b64.encodeToString(privKey.getEncoded());
+            return result;
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+
+    }
 
     private static byte[] gatherConsoleEntropy(int presses) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
