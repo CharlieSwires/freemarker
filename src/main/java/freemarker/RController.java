@@ -3,11 +3,10 @@ package freemarker;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Base64;
 import java.util.Date;
-import java.util.Properties;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -240,6 +239,12 @@ public class RController  {
 
         TemplateBeanResponse tb = service.converter(beanRepository6.findByName(name));
         return new ResponseEntity<TemplateBeanResponse>(tb, HttpStatus.OK);
+    }    
+    @GetMapping(path="loadAuditTrail", produces="application/json")
+    public ResponseEntity<List<ReturnBeanGeneral2>> loadAuditTrail() {
+
+    	List<ReturnBeanGeneral2> tb = service.converter(beanRepository.findAll());
+        return new ResponseEntity<List<ReturnBeanGeneral2>>(tb, HttpStatus.OK);
     }
     /**
      * test.pdf -> result<sha1HexString>.pdf downloads to the browser
